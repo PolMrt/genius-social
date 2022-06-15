@@ -22,6 +22,9 @@ export class User {
   name: string;
 
   @JoinTable()
-  @ManyToMany(() => Space, (space) => space.users, { eager: true })
+  @ManyToMany(() => Space, (space) => space.users, {
+    eager: true,
+    cascade: true,
+  })
   spaces: Space[];
 }

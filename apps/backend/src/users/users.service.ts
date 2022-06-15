@@ -1,7 +1,13 @@
 import { User } from "./entities/user.entity";
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Space } from "../spaces/entities/space.entity";
 
 // TODO: This should be a real class/interface representing a user entity
 

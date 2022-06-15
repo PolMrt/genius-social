@@ -18,7 +18,6 @@ export class Space {
   @Column()
   name: string;
 
-  @JoinTable()
   @ManyToMany(() => User, (user) => user.spaces)
   users: User[];
 }

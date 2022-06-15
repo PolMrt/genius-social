@@ -11,6 +11,7 @@ async function bootstrap() {
       //forbidNonWhitelisted: true : will throw an error if a non whitelisted (by DTO) params is passed
     })
   );
+  app.enableCors();
   await app.listen(3002);
 }
 bootstrap();
