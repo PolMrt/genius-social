@@ -4,17 +4,27 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { BackendService } from "./backend.service";
 import { ConfigModule } from "@nestjs/config";
 import { CoffeesModule } from "./coffees/coffees.module";
+import { AuthModule } from "./auth/auth.module";
+import { UsersModule } from "./users/users.module";
+import { SpacesModule } from './spaces/spaces.module';
 import * as Joi from "@hapi/joi";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: [".env.dev", ".env.prod"],
+      isGlobal: true,
       validationSchema: Joi.object({
+        NODE_ENV: Joi.string()
+          .valid("development", "production", "test", "provision")
+          .default("development"),
         DATABASE_HOST: Joi.required(),
         DATABASE_PORT: Joi.number().default(5432),
         DATABASE_USER: Joi.required(),
         DATABASE_PASSWORD: Joi.required(),
         DATABASE_NAME: Joi.required(),
+        JWT_SECRET: Joi.required(),
+        HASH_SALT_ROUND: Joi.number().default(10).min(2).required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -28,6 +38,9 @@ import * as Joi from "@hapi/joi";
       synchronize: true, // TODO: your entities will be synced with the database(**recommended: disable in prod**)
     }),
     CoffeesModule,
+    AuthModule,
+    UsersModule,
+    SpacesModule,
   ],
   controllers: [BackendController],
   providers: [BackendService],
