@@ -24,6 +24,11 @@ export class BackendController {
     return this.backendService.getHello();
   }
 
+  // @Post("auth/login")
+  // testreq(@Request() res: any) {
+  //   console.log(res);
+  //   return "ok";
+  // }
   @UseGuards(LocalAuthGuard)
   @Post("auth/login")
   async login(@Request() req: any) {
