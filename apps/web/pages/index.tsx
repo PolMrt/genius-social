@@ -1,57 +1,25 @@
-import { useState } from "react";
-import { Button } from "ui";
+import { useRouter } from "next/router";
 import Spaces from "../components/spaces";
+import Layout from "../components/ui/layout";
+import isAuth from "../hoc/auth";
 
-export default function Web() {
-  const [token, setToken] = useState("");
+function Web() {
+  const router = useRouter();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
-
-    fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`, {
-      body: JSON.stringify({ mail: email, password }),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.access_token) {
-          setToken(res.access_token);
-        } else if (res.message) {
-          alert(res.message);
-        }
-      })
-      .catch((err) => alert(err));
+  const onLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
   };
 
   return (
-    <div>
-      <h1>Genius Social App</h1>
-      {token ? (
-        <button onClick={() => setToken("")}>Log out</button>
-      ) : (
-        <form onSubmit={onSubmit}>
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" />
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" />
-          <button type="submit">Login</button>
-        </form>
-      )}
-
-      {token ? <Spaces token={token} /> : null}
-
-      <h2>Token</h2>
-      {token ? (
-        <details>
-          <summary>Show token</summary>
-          {token}
-        </details>
-      ) : null}
-    </div>
+    <Layout>
+      <h1 className="font-sans2 font-black text-4xl">Genius Social</h1>
+      <button onClick={onLogout}>Logout</button>
+      <div className="mt-6">
+        <Spaces />
+      </div>
+    </Layout>
   );
 }
+
+export default isAuth()(Web);
