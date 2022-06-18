@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -17,8 +18,16 @@ export class SpacesController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getUserSpace(@Request() req: any) {
-    const userSpaces = await this.spacesService.getUserSpace(req.user.id);
+    const userSpaces = await this.spacesService.getUserSpaces(req.user.id);
     return userSpaces;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(":slug")
+  async getSpace(@Param("slug") slug: string, @Request() req: any) {
+    const thisSpace = await this.spacesService.getUserSpace(req.user.id, slug);
+
+    return thisSpace;
   }
 
   @UseGuards(JwtAuthGuard)
