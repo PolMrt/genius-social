@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { ReactNode, useEffect } from "react";
 
-const isAuth = () => (Component: React.ElementType) => {
+const withAuth = () => (Component: React.ElementType) => {
   function Authinner() {
     const router = useRouter();
 
@@ -16,4 +16,4 @@ const isAuth = () => (Component: React.ElementType) => {
   return Authinner;
 };
 
-export default isAuth;
+export default withAuth;

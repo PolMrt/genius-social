@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
-import Spaces from "../components/spaces/spaces";
-import Layout from "../components/ui/layout";
-import isAuth from "../hoc/auth";
+import Sidebar from "../components/ui/sidebar/sidebar";
+import withAuth from "../hoc/auth";
 
 function Web() {
   const router = useRouter();
@@ -12,14 +11,10 @@ function Web() {
   };
 
   return (
-    <Layout>
-      <h1 className="font-sans2 text-4xl font-black">Genius Social</h1>
+    <Sidebar title="Dashboard">
       <button onClick={onLogout}>Logout</button>
-      <div className="mt-6">
-        <Spaces />
-      </div>
-    </Layout>
+    </Sidebar>
   );
 }
 
-export default isAuth()(Web);
+export default withAuth()(Web);

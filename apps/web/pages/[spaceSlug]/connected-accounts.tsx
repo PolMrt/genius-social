@@ -1,17 +1,17 @@
 import Sidebar from "@/components/ui/sidebar/sidebar";
+import withAuth from "hoc/auth";
 import withSpaceData from "hoc/space";
-import withAuth from "../../hoc/auth";
 
-function Sapcehomepage({ space }: any) {
+function connectedAccounts({ space }: any) {
   return (
     <Sidebar
-      title={space.name}
+      title="Connected account"
       currentSpace={space.name}
       currentSpaceSlug={space.slug}
     >
-      <h1>g</h1>
+      yo
     </Sidebar>
   );
 }
 
-export default withAuth()(withSpaceData()(Sapcehomepage));
+export default withAuth()(withSpaceData()(connectedAccounts));
