@@ -1,8 +1,8 @@
+import { UsersService } from "./../users/users.service";
 import { CreateSpaceDto } from "./dto/create-space.dto";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Not, Repository } from "typeorm";
-import { User } from "../users/entities/user.entity";
+import { Repository } from "typeorm";
 import { Space } from "./entities/space.entity";
 
 @Injectable()
@@ -10,12 +10,11 @@ export class SpacesService {
   constructor(
     @InjectRepository(Space)
     private readonly spaceRepository: Repository<Space>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly usersService: UsersService
   ) {}
 
   async createSpace(userId: number, createSpaceDto: CreateSpaceDto) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.usersService.findById(userId);
 
     if (!user) {
       throw new NotFoundException();
@@ -28,7 +27,7 @@ export class SpacesService {
   }
 
   async getUserSpaces(userId: number): Promise<Space[]> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.usersService.findById(userId);
     if (!user) {
       throw new NotFoundException();
     }
@@ -37,7 +36,7 @@ export class SpacesService {
   }
 
   async getUserSpace(userId: number, slug: string): Promise<Space> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.usersService.findById(userId);
     if (!user) {
       throw new NotFoundException();
     }

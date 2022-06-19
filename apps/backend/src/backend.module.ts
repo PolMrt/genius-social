@@ -6,8 +6,9 @@ import { ConfigModule } from "@nestjs/config";
 import { CoffeesModule } from "./coffees/coffees.module";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
-import { SpacesModule } from './spaces/spaces.module';
+import { SpacesModule } from "./spaces/spaces.module";
 import * as Joi from "@hapi/joi";
+import { ConnectedAccountsModule } from "./connected-accounts/connected-accounts.module";
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import * as Joi from "@hapi/joi";
     AuthModule,
     UsersModule,
     SpacesModule,
+    ConnectedAccountsModule,
   ],
   controllers: [BackendController],
   providers: [BackendService],

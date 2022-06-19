@@ -8,7 +8,9 @@ const withSpaceData = () => (Component: React.ElementType) => {
     const router = useRouter();
 
     const { data: space, error } = useSWR(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces/${router.query.spaceSlug}`,
+      {
+        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces/${router.query.spaceSlug}`,
+      },
       fetcher
     );
 

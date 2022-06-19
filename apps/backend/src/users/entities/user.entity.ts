@@ -4,8 +4,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Invitation } from "../../connected-accounts/entities/invitation.entity";
 
 @Entity()
 export class User {

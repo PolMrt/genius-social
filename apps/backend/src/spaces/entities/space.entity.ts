@@ -3,8 +3,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Invitation } from "../../connected-accounts/entities/invitation.entity";
 import { User } from "../../users/entities/user.entity";
 
 @Entity()
@@ -20,4 +22,9 @@ export class Space {
 
   @ManyToMany(() => User, (user) => user.spaces)
   users: User[];
+
+  @OneToMany(() => Invitation, (invitation) => invitation.space, {
+    eager: true,
+  })
+  invitations: Invitation[];
 }

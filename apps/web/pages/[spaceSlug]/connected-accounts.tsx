@@ -1,3 +1,4 @@
+import AllConnectedAccounts from "@/components/connected-accounts/list";
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import withAuth from "hoc/auth";
 import withSpaceData from "hoc/space";
@@ -9,7 +10,7 @@ function connectedAccounts({ space }: any) {
       currentSpace={space.name}
       currentSpaceSlug={space.slug}
     >
-      yo
+      <AllConnectedAccounts spaceSlug={space.slug} />
     </Sidebar>
   );
 }

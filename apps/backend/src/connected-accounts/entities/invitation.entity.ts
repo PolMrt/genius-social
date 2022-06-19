@@ -2,11 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "../../../users/entities/user.entity";
-import { Space } from "../../entities/space.entity";
+import { User } from "../../users/entities/user.entity";
+import { Space } from "../../spaces/entities/space.entity";
 import { InvitationStates } from "../enum/invitation-states.enum";
 import { InvitationTypes } from "../enum/invitation-types.enum";
 
@@ -15,7 +17,7 @@ export class Invitation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   uniqueId: string;
 
   @Column({
@@ -30,11 +32,11 @@ export class Invitation {
   @Column({ nullable: false, default: InvitationStates.waiting })
   state: InvitationStates;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
   user: User;
 
-  @OneToOne(() => Space)
-  @JoinColumn()
+  @ManyToOne(() => Space, (space) => space.invitations)
+  @JoinTable()
   space: Space;
 }
