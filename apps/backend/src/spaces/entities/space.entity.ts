@@ -23,8 +23,6 @@ export class Space {
   @ManyToMany(() => User, (user) => user.spaces)
   users: User[];
 
-  @OneToMany(() => Invitation, (invitation) => invitation.space, {
-    eager: true,
-  })
+  @OneToMany(() => Invitation, (invitation) => invitation.space)
   invitations: Invitation[];
 }

@@ -1,23 +1,20 @@
+import React from "react";
 import fetcher from "@/utils/fetcher";
 import { useRouter } from "next/router";
-import React, { ReactNode, useEffect } from "react";
-import useSWR from "swr";
+import { useQuery } from "react-query";
 
 const withSpaceData = () => (Component: React.ElementType) => {
   function Spaceinner() {
     const router = useRouter();
-
-    const { data: space, error } = useSWR(
-      {
-        url: `${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces/${router.query.spaceSlug}`,
-      },
+    const { isLoading, isError, data, error } = useQuery(
+      `/spaces/${router.query.spaceSlug}`,
       fetcher
     );
 
-    if (error) return <div>failed to load</div>;
-    if (!space) return <div>loading...</div>;
+    if (isLoading) return <div>loading...</div>;
+    if (isError) return <div>failed to load</div>;
 
-    return <Component space={space} />;
+    return <Component space={data} />;
   }
   return Spaceinner;
 };

@@ -1,8 +1,8 @@
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { FormEvent, Fragment, ReactNode, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import slugify from "slugify";
-import { useSWRConfig } from "swr";
+import { useMutation } from "react-query";
 
 type Props = {
   open: boolean;
@@ -10,7 +10,6 @@ type Props = {
 };
 
 export default function Createspace({ open, setOpen }: Props) {
-  const { mutate } = useSWRConfig();
   const [spaceName, setSpaceName] = useState("");
   const [spaceSlug, setSpaceSlug] = useState("");
 
@@ -18,11 +17,9 @@ export default function Createspace({ open, setOpen }: Props) {
     setSpaceSlug(slugify(spaceName).toLowerCase());
   }, [spaceName]);
 
-  const onCreateSpace = (e) => {
-    e.preventDefault();
-
-    fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces`, {
-      body: JSON.stringify({ name: spaceName, slug: spaceSlug }),
+  const mutation = useMutation((newSpace: any) => {
+    return fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces`, {
+      body: JSON.stringify(newSpace),
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,9 +29,13 @@ export default function Createspace({ open, setOpen }: Props) {
       .then((res) => res.json())
       .then((res) => {
         setOpen(false);
-        mutate(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces`);
-      })
-      .catch((err) => alert(err));
+      });
+  });
+
+  const onCreateSpace = (e: FormEvent) => {
+    e.preventDefault();
+
+    mutation.mutate({ name: spaceName, slug: spaceSlug });
   };
 
   return (
@@ -138,6 +139,7 @@ export default function Createspace({ open, setOpen }: Props) {
                         Cancel
                       </button>
                       <button
+                        disabled={mutation.isLoading}
                         type="submit"
                         className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-dark-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-dark-blue-700 focus:outline-none focus:ring-2 focus:ring-dark-blue-500 focus:ring-offset-2"
                       >

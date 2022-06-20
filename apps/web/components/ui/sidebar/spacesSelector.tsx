@@ -1,14 +1,13 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 
 import fetcher from "@/utils/fetcher";
-import useSWR from "swr";
 import Createspace from "@/components/spaces/createSpace";
 import { PlusIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import { useQuery } from "react-query";
 
 type Props = {
   currentSpace: string;
@@ -64,13 +63,11 @@ export default function SpacesSelector({ currentSpace }: Props) {
 }
 
 export function AllUserSpaces() {
-  const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/spaces`,
-    fetcher
-  );
+  const { isLoading, isError, data, error } = useQuery("/spaces", fetcher);
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (isLoading) return <div>loading...</div>;
+  if (isError) return <div>failed to load</div>;
+
   return data.map((thisSpace: any) => (
     <div key={thisSpace.id}>
       <Menu.Item>

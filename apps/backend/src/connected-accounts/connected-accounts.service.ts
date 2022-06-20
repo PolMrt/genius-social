@@ -2,7 +2,11 @@ import { GetInvitationsDto } from "./dto/get-invitations.dto";
 import { UsersService } from "./../users/users.service";
 import { SpacesService } from "../spaces/spaces.service";
 import { CreateInvitationDto } from "./dto/create-invitation.dto";
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Invitation } from "./entities/invitation.entity";
@@ -21,8 +25,27 @@ export class ConnectedAccountsService {
     spaceSlug: string
   ): Promise<Invitation[]> {
     const userSpace = await this.spacesService.getUserSpace(userId, spaceSlug);
+    const invitations = await this.invitationRepository.find({
+      where: { space: userSpace },
+    });
 
-    return userSpace.invitations;
+    return invitations;
+  }
+
+  async getInvitation(
+    spaceSlug: string,
+    invitationUniqueId: string
+  ): Promise<Invitation> {
+    const invitation = await this.invitationRepository.findOne({
+      where: { uniqueId: invitationUniqueId },
+      relations: ["space"],
+    });
+
+    if (!invitation || invitation.space.slug !== spaceSlug) {
+      throw new NotFoundException();
+    }
+
+    return invitation;
   }
 
   async createInvitation(

@@ -12,14 +12,14 @@ import {
   Param,
 } from "@nestjs/common";
 
-@Controller("connected-accounts")
+@Controller("space/:spaceSlug/connected-accounts")
 export class ConnectedAccountsController {
   constructor(
     private readonly connectedAccountsService: ConnectedAccountsService
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get("invitations/:spaceSlug")
+  @Get("invitations")
   async getInvitations(
     @Request() req: any,
     @Param("spaceSlug") spaceSlug: string
@@ -29,6 +29,19 @@ export class ConnectedAccountsController {
       spaceSlug
     );
     return invitations;
+  }
+
+  @Get("invitations/:id")
+  async getInvitation(
+    @Param("spaceSlug") spaceSlug: string,
+    @Param("id") invitationUniqueId: string
+  ) {
+    const invitation = await this.connectedAccountsService.getInvitation(
+      spaceSlug,
+      invitationUniqueId
+    );
+
+    return invitation;
   }
 
   @UseGuards(JwtAuthGuard)
