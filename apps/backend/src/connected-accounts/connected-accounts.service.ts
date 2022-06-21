@@ -3,6 +3,7 @@ import { UsersService } from "./../users/users.service";
 import { SpacesService } from "../spaces/spaces.service";
 import { CreateInvitationDto } from "./dto/create-invitation.dto";
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -50,13 +51,11 @@ export class ConnectedAccountsService {
 
   async createInvitation(
     userId: number,
+    spaceSlug: string,
     createInvitationDto: CreateInvitationDto
   ): Promise<Invitation> {
     const user = await this.usersService.findById(userId);
-    const userSpace = await this.spacesService.getUserSpace(
-      userId,
-      createInvitationDto.spaceSlug
-    );
+    const userSpace = await this.spacesService.getUserSpace(userId, spaceSlug);
 
     const uniqueId = Math.random().toString(36).substr(2, 8);
 
@@ -69,5 +68,27 @@ export class ConnectedAccountsService {
 
     return this.invitationRepository.save(newInvitation);
     // Check if user exists and has this space
+  }
+
+  async deleteInvitation(
+    userId: number,
+    spaceSlug: string,
+    invitationId: number
+  ) {
+    const userSpace = await this.spacesService.getUserSpace(userId, spaceSlug);
+    const invitation = await this.invitationRepository.findOne({
+      where: { id: invitationId },
+      relations: ["space"],
+    });
+
+    if (!invitation) {
+      throw new NotFoundException();
+    }
+
+    if (invitation.space.id !== userSpace.id) {
+      throw new ForbiddenException();
+    }
+
+    return this.invitationRepository.remove(invitation);
   }
 }

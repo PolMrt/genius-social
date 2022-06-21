@@ -10,6 +10,7 @@ import {
   Body,
   Get,
   Param,
+  Delete,
 } from "@nestjs/common";
 
 @Controller("space/:spaceSlug/connected-accounts")
@@ -45,13 +46,30 @@ export class ConnectedAccountsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete("invitations/:id")
+  async deleteInvitation(
+    @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string,
+    @Param("id") invitationUniqueId: number
+  ) {
+    const deleted = await this.connectedAccountsService.deleteInvitation(
+      req.userId,
+      spaceSlug,
+      invitationUniqueId
+    );
+    return deleted;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post("invitations")
   async createNewInvitation(
     @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string,
     @Body() createInvitationDto: CreateInvitationDto
   ) {
     const invitation = await this.connectedAccountsService.createInvitation(
       req.userId,
+      spaceSlug,
       createInvitationDto
     );
 

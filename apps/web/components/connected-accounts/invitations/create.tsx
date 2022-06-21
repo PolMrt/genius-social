@@ -5,47 +5,54 @@ import slugify from "slugify";
 import { useMutation, useQueryClient } from "react-query";
 
 import Button, { ButtonStyles } from "@/components/ui/button";
-import { ApiFormatedError, postFetcher } from "@/utils/fetcher";
+import { postFetcher } from "@/utils/fetcher";
+import { ApiFormatedError } from "utils/fetcher";
 
 type Props = {
   open: boolean;
   setOpen: (value: boolean) => void;
+  spaceSlug: string;
 };
 
-export default function Createspace({ open, setOpen }: Props) {
+export default function CreateInvitation({ open, setOpen, spaceSlug }: Props) {
   const queryClient = useQueryClient();
-  const [spaceName, setSpaceName] = useState("");
-  const [spaceSlug, setSpaceSlug] = useState("");
-
-  useEffect(() => {
-    setSpaceSlug(slugify(spaceName).toLowerCase());
-  }, [spaceName]);
 
   const mutation = useMutation(
-    (newSpace: any) => {
-      return postFetcher(`/spaces`, newSpace);
+    (newInvitation: any) => {
+      return postFetcher(
+        `/space/${spaceSlug}/connected-accounts/invitations`,
+        newInvitation
+      );
     },
     {
       onSuccess: (data) => {
         setOpen(false);
-        setSpaceName("");
-        queryClient.setQueryData(`/spaces`, (draft: any) => [
-          ...draft,
-          data?.data,
-        ]);
+        queryClient.setQueryData(
+          `/space/${spaceSlug}/connected-accounts/invitations`,
+          (draft: any) => [...draft, data?.data]
+        );
       },
     }
   );
 
-  const onCreateSpace = (event: FormEvent<HTMLFormElement>) => {
+  const onCreateInvitation = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const formElements = form.elements as typeof form.elements & {
+      identifier: HTMLInputElement;
+    };
 
-    mutation.mutate({ name: spaceName, slug: spaceSlug });
+    mutation.mutate({ identifier: formElements.identifier.value });
+  };
+
+  const closePanel = () => {
+    mutation.reset();
+    setOpen(false);
   };
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Dialog as="div" className="relative z-10" onClose={closePanel}>
         <div className="fixed inset-0 bg-gray-500/25" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -62,14 +69,14 @@ export default function Createspace({ open, setOpen }: Props) {
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                   <form
-                    onSubmit={onCreateSpace}
+                    onSubmit={onCreateInvitation}
                     className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
                   >
                     <div className="h-0 flex-1 overflow-y-auto">
                       <div className="bg-dark-blue-700 py-6 px-4 sm:px-6">
                         <div className="flex items-center justify-between">
                           <Dialog.Title className="text-lg font-medium text-white">
-                            New Space
+                            New Invitation
                           </Dialog.Title>
                           <div className="ml-3 flex h-7 items-center">
                             <button
@@ -92,6 +99,7 @@ export default function Createspace({ open, setOpen }: Props) {
                           </p>
                         </div>
                       </div>
+
                       <div className="flex flex-1 flex-col justify-between">
                         <div className="divide-y divide-gray-200 px-4 sm:px-6">
                           <div className="space-y-6 pt-6 pb-5">
@@ -111,39 +119,21 @@ export default function Createspace({ open, setOpen }: Props) {
                                 )}
                               </div>
                             ) : null}
+
                             <div>
                               <label
-                                htmlFor="space-name"
+                                htmlFor="identifier"
                                 className="block text-sm font-medium text-gray-900"
                               >
-                                Space name
+                                Username
                               </label>
                               <div className="mt-1">
                                 <input
                                   type="text"
-                                  name="space-name"
-                                  id="project-name"
+                                  name="identifier"
+                                  id="identifier"
+                                  placeholder="instagram"
                                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-blue-500 focus:ring-dark-blue-500 sm:text-sm"
-                                  value={spaceName}
-                                  onChange={(e) => setSpaceName(e.target.value)}
-                                />
-                              </div>
-                            </div>
-                            <div>
-                              <label
-                                htmlFor="space-name"
-                                className="block text-sm font-medium text-gray-900"
-                              >
-                                Space slug
-                              </label>
-                              <div className="mt-1">
-                                <input
-                                  type="text"
-                                  name="space-name"
-                                  id="project-name"
-                                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-dark-blue-500 focus:ring-dark-blue-500 sm:text-sm"
-                                  value={spaceSlug}
-                                  onChange={(e) => setSpaceSlug(e.target.value)}
                                 />
                               </div>
                             </div>
@@ -155,7 +145,7 @@ export default function Createspace({ open, setOpen }: Props) {
                       <Button
                         type="reset"
                         style={ButtonStyles.secondary}
-                        onClick={() => setOpen(false)}
+                        onClick={closePanel}
                         loading={mutation.isLoading}
                       >
                         Cancel

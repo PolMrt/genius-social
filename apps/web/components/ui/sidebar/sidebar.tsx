@@ -8,11 +8,18 @@ import Link from "next/link";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 
+type Tab = {
+  name: string;
+  href: string;
+};
+
 type Props = {
   children: ReactNode;
   title: string;
   currentSpace?: string | null;
   currentSpaceSlug?: string | null;
+  actions?: ReactNode[];
+  tabs?: Tab[];
 };
 
 export default function Sidebar({
@@ -20,6 +27,8 @@ export default function Sidebar({
   title,
   currentSpace = null,
   currentSpaceSlug = null,
+  actions = [],
+  tabs = [],
 }: Props) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,9 +52,21 @@ export default function Sidebar({
 
     return routes.map((thisRoute) => ({
       ...thisRoute,
-      current: router.asPath === thisRoute.href,
+      current: router.asPath.split("/")[2] === thisRoute.href.split("/")[2],
     }));
   }, [currentSpaceSlug, router]);
+
+  const tabsWithCurrent = useMemo(() => {
+    if (!currentSpaceSlug) return [];
+    const tabsToRet = tabs.map((thisTab) => ({
+      ...thisTab,
+      href: thisTab.href.replace("[spaceSlug]", currentSpaceSlug),
+    }));
+    return tabsToRet.map((thisTab) => ({
+      ...thisTab,
+      current: router.asPath === thisTab.href,
+    }));
+  }, [currentSpaceSlug, router, tabs]);
 
   return (
     <>
@@ -231,10 +252,60 @@ export default function Sidebar({
           </div>
           <main className="flex-1">
             <div className="py-6">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                <h1 className="text-2xl font-semibold text-gray-900">
-                  {title}
-                </h1>
+              <div className="mx-auto max-w-7xl px-4 pt-4 pb-8 sm:px-6 md:px-8">
+                <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
+                  <div className="md:flex md:items-center md:justify-between">
+                    <h1 className="text-2xl font-semibold leading-6 text-gray-900">
+                      {title}
+                    </h1>
+                    <div
+                      className={classNames(
+                        "flex md:absolute md:right-0 md:mt-0",
+                        { "mt-3 md:top-3": tabsWithCurrent.length > 0 }
+                      )}
+                    >
+                      {actions}
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <div className="sm:hidden">
+                      <label htmlFor="current-tab" className="sr-only">
+                        Select a tab
+                      </label>
+                      <select
+                        id="current-tab"
+                        name="current-tab"
+                        className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-dark-blue-500 focus:outline-none focus:ring-dark-blue-500 sm:text-sm"
+                        defaultValue={
+                          tabsWithCurrent.find((tab) => tab.current)?.name
+                        }
+                      >
+                        {tabsWithCurrent.map((tab) => (
+                          <option key={tab.name}>{tab.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="hidden sm:block">
+                      <nav className="-mb-px flex space-x-8">
+                        {tabsWithCurrent.map((tab) => (
+                          <Link key={tab.name} href={tab.href}>
+                            <a
+                              className={classNames(
+                                tab.current
+                                  ? "border-dark-blue-500 text-dark-blue-600"
+                                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                                "whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium"
+                              )}
+                              aria-current={tab.current ? "page" : undefined}
+                            >
+                              {tab.name}
+                            </a>
+                          </Link>
+                        ))}
+                      </nav>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                 {children}

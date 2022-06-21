@@ -1,9 +1,8 @@
-import { IsString } from "class-validator";
+import { IsAlphanumeric, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateInvitationDto {
   @IsString()
+  @IsNotEmpty()
+  @IsAlphanumeric()
   readonly identifier: string;
-
-  @IsString()
-  readonly spaceSlug: string;
 }
