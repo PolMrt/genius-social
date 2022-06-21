@@ -37,7 +37,7 @@ export class SpacesController {
     @Body() createSpaceDto: CreateSpaceDto
   ) {
     const createdSpace = await this.spacesService.createSpace(
-      req.user.userId,
+      req.user.id,
       createSpaceDto
     );
 

@@ -26,7 +26,7 @@ export class ConnectedAccountsController {
     @Param("spaceSlug") spaceSlug: string
   ) {
     const invitations = await this.connectedAccountsService.getInvitations(
-      req.userId,
+      req.user.id,
       spaceSlug
     );
     return invitations;
@@ -53,7 +53,7 @@ export class ConnectedAccountsController {
     @Param("id") invitationUniqueId: number
   ) {
     const deleted = await this.connectedAccountsService.deleteInvitation(
-      req.userId,
+      req.user.id,
       spaceSlug,
       invitationUniqueId
     );
@@ -68,7 +68,7 @@ export class ConnectedAccountsController {
     @Body() createInvitationDto: CreateInvitationDto
   ) {
     const invitation = await this.connectedAccountsService.createInvitation(
-      req.userId,
+      req.user.id,
       spaceSlug,
       createInvitationDto
     );

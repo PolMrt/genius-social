@@ -7,6 +7,8 @@ import { UserIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import fetcher from "@/utils/fetcher";
+import { useQuery } from "react-query";
 
 type Tab = {
   name: string;
@@ -32,6 +34,7 @@ export default function Sidebar({
 }: Props) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const userData = useQuery(`/users/me`, fetcher);
 
   const navigation = useMemo(() => {
     if (!currentSpaceSlug) return [];
@@ -219,23 +222,27 @@ export default function Sidebar({
               <SpacesSelector currentSpace={currentSpace} />
             </div>
             <div className="flex flex-shrink-0 border-t border-dark-blue-800 p-4">
-              <a href="#" className="group block w-full flex-shrink-0">
-                <div className="flex items-center">
-                  <div>
-                    <img
-                      className="inline-block h-9 w-9 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
+              <div className="group block w-full flex-shrink-0">
+                {!userData.isLoading && !userData.isError ? (
+                  <div className="flex items-center">
+                    <div>
+                      <img
+                        className="inline-block h-9 w-9 rounded-full"
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt=""
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-white">
+                        {userData.data.name}
+                      </p>
+                      <p className="text-xs font-medium text-dark-blue-200 group-hover:text-white">
+                        View profile
+                      </p>
+                    </div>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-white">Tom Cook</p>
-                    <p className="text-xs font-medium text-dark-blue-200 group-hover:text-white">
-                      View profile
-                    </p>
-                  </div>
-                </div>
-              </a>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>

@@ -15,8 +15,11 @@ export class UsersService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async findById(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+  async findById(id: number, includeSpace: boolean = false): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: includeSpace ? ["spaces"] : [],
+    });
     if (!user) {
       throw new HttpException("No user with that id", HttpStatus.NOT_FOUND);
     }

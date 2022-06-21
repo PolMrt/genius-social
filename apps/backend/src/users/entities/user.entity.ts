@@ -4,10 +4,8 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Invitation } from "../../connected-accounts/entities/invitation.entity";
 
 @Entity()
 export class User {
@@ -17,16 +15,13 @@ export class User {
   @Column()
   mail: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()
   name: string;
 
   @JoinTable()
-  @ManyToMany(() => Space, (space) => space.users, {
-    eager: true,
-    cascade: true,
-  })
+  @ManyToMany(() => Space, (space) => space.users)
   spaces: Space[];
 }

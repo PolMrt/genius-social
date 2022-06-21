@@ -27,7 +27,7 @@ export class SpacesService {
   }
 
   async getUserSpaces(userId: number): Promise<Space[]> {
-    const user = await this.usersService.findById(userId);
+    const user = await this.usersService.findById(userId, true);
     if (!user) {
       throw new NotFoundException();
     }
@@ -36,7 +36,7 @@ export class SpacesService {
   }
 
   async getUserSpace(userId: number, slug: string): Promise<Space> {
-    const user = await this.usersService.findById(userId);
+    const user = await this.usersService.findById(userId, true);
     if (!user) {
       throw new NotFoundException();
     }

@@ -15,6 +15,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // TODO: check si pas revoke, si user existe bien, et enrichire les info de l'user si besoin
-    return { userId: payload.sub, username: payload.username };
+    return { id: payload.sub, mail: payload.mail };
   }
 }
