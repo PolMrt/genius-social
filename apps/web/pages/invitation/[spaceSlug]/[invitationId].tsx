@@ -1,8 +1,38 @@
+import FbConnection from "@/components/invitations-user-flow/fbConnection";
+import InstagramAccount from "@/components/invitations-user-flow/instagramAccounts";
+import Pages from "@/components/invitations-user-flow/pages";
+import Steps from "@/components/invitations-user-flow/steps";
 import Button from "@/components/ui/button";
 import Layout from "@/components/ui/layout";
 import { GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
+import FacebookLogin from "react-facebook-login";
 
-export default function invitationPage({ invitation }: any) {
+export default function InvitationPage({ invitation }: any) {
+  const [fbAT, setFbAT] = useState("");
+  const [selectedPageId, setSelectedPageId] = useState("");
+  const [selectedInstaId, setSelectedInstaId] = useState("");
+  const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    if (fbAT) {
+      setStep((prev) => (prev > 2 ? prev : 2));
+    }
+  }, [fbAT]);
+
+  useEffect(() => {
+    if (selectedPageId) {
+      setStep((prev) => (prev > 3 ? prev : 3));
+    }
+  }, [selectedPageId]);
+
+  useEffect(() => {
+    if (selectedInstaId) {
+      setStep((prev) => (prev > 4 ? prev : 4));
+      alert("Connection ok, do backend needed actions");
+    }
+  }, [selectedInstaId]);
+
   return (
     <main className="pt-6">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -90,12 +120,38 @@ export default function invitationPage({ invitation }: any) {
           </ul>
         </div>
 
-        <p className="mt-4 text-gray-700">
+        {/* <p className="mt-4 text-gray-700">
           You will be redirected to Facebook to login to an account who has
-          access to the page set as your Instagram account's page.
-        </p>
+          access to the page set as your Instagram account&apos;s page.
+        </p> */}
 
-        <Button className="mt-8 w-full">Authorize</Button>
+        {/* <Button className="mt-8 w-full">Authorize</Button> */}
+
+        <div className="mt-6 rounded-lg bg-white px-6 py-6 shadow">
+          <Steps step={step} />
+          <div className="mt-8">
+            {step === 1 ? (
+              <FbConnection token={fbAT} setToken={setFbAT} />
+            ) : null}
+
+            {step === 2 ? (
+              <Pages
+                accessToken={fbAT}
+                selectedPageId={selectedPageId}
+                setSelectedPageId={setSelectedPageId}
+              />
+            ) : null}
+
+            {step === 3 ? (
+              <InstagramAccount
+                accessToken={fbAT}
+                selectedPageId={selectedPageId}
+                requestedAccountUsername={invitation.identifier}
+                setSelectedInstaId={setSelectedInstaId}
+              />
+            ) : null}
+          </div>
+        </div>
       </div>
     </main>
   );

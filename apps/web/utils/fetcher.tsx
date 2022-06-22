@@ -15,6 +15,18 @@ const fetcher = ({ queryKey }: any) =>
 
 export default fetcher;
 
+type FbFetcher = {
+  queryKey: string[];
+};
+
+export const fbFetcher = ({ queryKey }: FbFetcher) => {
+  const url = new URL(
+    `https://graph.facebook.com/v${process.env.NEXT_PUBLIC_FB_V}${queryKey[0]}`
+  );
+  url.searchParams.append("access_token", queryKey[1]);
+  return axios.get(url.href);
+};
+
 export const postFetcher = (url: string, body: any) =>
   axios
     .post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`, body, {
