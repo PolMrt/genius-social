@@ -6,18 +6,30 @@ import { postFetcher } from "@/utils/fetcher";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
+import ReactCanvasConfetti from "react-canvas-confetti";
+import Button from "@/components/ui/button";
 
 export default function InvitationPage({ invitation }: any) {
+  const [confState, setConfState] = useState({ fire: false, reset: false });
   const [fbAT, setFbAT] = useState("");
   const [selectedPageId, setSelectedPageId] = useState("");
   const [selectedInstaId, setSelectedInstaId] = useState("");
   const [step, setStep] = useState(1);
 
-  const acceptInvitationMutation = useMutation((invitationData: any) =>
-    postFetcher(
-      `/space/${invitation.space.slug}/connected-accounts/invitations/accept/${invitation.uniqueId}`,
-      invitationData
-    )
+  const acceptInvitationMutation = useMutation(
+    (invitationData: any) =>
+      postFetcher(
+        `/space/${invitation.space.slug}/invitations/accept/${invitation.uniqueId}`,
+        invitationData
+      ),
+    {
+      onSuccess: () => {
+        setTimeout(
+          () => setConfState((prev) => ({ ...prev, fire: true })),
+          250
+        );
+      },
+    }
   );
 
   useEffect(() => {
@@ -50,7 +62,7 @@ export default function InvitationPage({ invitation }: any) {
         <h1 className="text-center font-sans2 text-2xl font-extrabold">
           {invitation.space.name}
         </h1>
-        <div className="mt-6 rounded-lg bg-white px-6 py-6 shadow">
+        <div className="relative z-0 mt-6 rounded-lg bg-white px-6 py-6 shadow">
           <h2 className="text-xl font-medium">
             @{invitation.identifier} access request
           </h2>
@@ -131,45 +143,76 @@ export default function InvitationPage({ invitation }: any) {
           </ul>
         </div>
 
-        {/* <p className="mt-4 text-gray-700">
-          You will be redirected to Facebook to login to an account who has
-          access to the page set as your Instagram account&apos;s page.
-        </p> */}
+        {acceptInvitationMutation.isSuccess ? (
+          <>
+            <ReactCanvasConfetti
+              className="fixed top-0 left-0 h-full w-full object-cover"
+              fire={confState.fire}
+              reset={confState.reset}
+              origin={{
+                x: 0.5,
+                y: 0.6,
+              }}
+              zIndex={10}
+            />
+            <div className="relative z-20 mt-6 flex items-center justify-center rounded-lg bg-white px-6 py-6 shadow">
+              <div className="flex flex-col items-center">
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-20 w-20 text-green-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <h2 className="text-lg font-bold text-green-400">
+                  Your account is connected
+                </h2>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="mt-6 rounded-lg bg-white px-6 py-6 shadow">
+            <Steps step={step} />
+            <div className="mt-8">
+              {step === 1 ? (
+                <FbConnection token={fbAT} setToken={setFbAT} />
+              ) : null}
 
-        {/* <Button className="mt-8 w-full">Authorize</Button> */}
+              {step === 2 ? (
+                <Pages
+                  accessToken={fbAT}
+                  selectedPageId={selectedPageId}
+                  setSelectedPageId={setSelectedPageId}
+                />
+              ) : null}
 
-        <div className="mt-6 rounded-lg bg-white px-6 py-6 shadow">
-          <Steps step={step} />
-          <div className="mt-8">
-            {step === 1 ? (
-              <FbConnection token={fbAT} setToken={setFbAT} />
-            ) : null}
+              {step === 3 ? (
+                <InstagramAccount
+                  accessToken={fbAT}
+                  selectedPageId={selectedPageId}
+                  requestedAccountUsername={invitation.identifier}
+                  setSelectedInstaId={setSelectedInstaId}
+                />
+              ) : null}
 
-            {step === 2 ? (
-              <Pages
-                accessToken={fbAT}
-                selectedPageId={selectedPageId}
-                setSelectedPageId={setSelectedPageId}
-              />
-            ) : null}
-
-            {step === 3 ? (
-              <InstagramAccount
-                accessToken={fbAT}
-                selectedPageId={selectedPageId}
-                requestedAccountUsername={invitation.identifier}
-                setSelectedInstaId={setSelectedInstaId}
-              />
-            ) : null}
-
-            {step === 4 ? (
-              <>
-                {acceptInvitationMutation.isLoading ? "Loading..." : null}
-                {acceptInvitationMutation.isError ? "An error occured" : null}
-              </>
-            ) : null}
+              {step === 4 ? (
+                <>
+                  {acceptInvitationMutation.isLoading ? "Loading..." : null}
+                  {acceptInvitationMutation.isError ? "An error occured" : null}
+                </>
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </main>
   );
@@ -177,7 +220,7 @@ export default function InvitationPage({ invitation }: any) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const rawData = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/space/${context.query.spaceSlug}/connected-accounts/invitations/${context.query.invitationId}`
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/space/${context.query.spaceSlug}/invitations/${context.query.invitationId}`
   );
   if (!rawData.ok) {
     throw new Error();

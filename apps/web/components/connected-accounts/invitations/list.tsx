@@ -10,7 +10,7 @@ type Props = {
 
 export default function AllConnectedAccounts({ spaceSlug }: Props) {
   const { isLoading, isError, data, error } = useQuery(
-    `/space/${spaceSlug}/connected-accounts/invitations`,
+    `/space/${spaceSlug}/invitations`,
     fetcher
   );
 
@@ -103,13 +103,11 @@ function Row({ spaceSlug, invitation }: RowProps) {
 
   const mutation = useMutation(
     (invitationId: number) =>
-      deleteFetcher(
-        `/space/${spaceSlug}/connected-accounts/invitations/${invitationId}`
-      ),
+      deleteFetcher(`/space/${spaceSlug}/invitations/${invitationId}`),
     {
       onSuccess: (_, invitationId) => {
         queryClient.setQueryData(
-          `/space/${spaceSlug}/connected-accounts/invitations`,
+          `/space/${spaceSlug}/invitations`,
           (draft: any) => {
             if (typeof draft === typeof ["a"]) {
               return draft.filter(

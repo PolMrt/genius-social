@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { ConnectedAccount } from "../../connected-accounts/entities/connected-accounts.entity";
-import { Invitation } from "../../connected-accounts/entities/invitation.entity";
+import { Invitation } from "../../invitations/entities/invitation.entity";
 import { User } from "../../users/entities/user.entity";
 
 @Entity()

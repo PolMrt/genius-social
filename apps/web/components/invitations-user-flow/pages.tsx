@@ -21,6 +21,9 @@ export default function Pages({
     onSuccess: (data) => {
       if (!preSelectedPage) {
         setPreSelectedPage(data.data.data[0].id);
+        if (data.data.data.length === 1) {
+          setSelectedPageId(data.data.data[0].id);
+        }
       }
     },
   });

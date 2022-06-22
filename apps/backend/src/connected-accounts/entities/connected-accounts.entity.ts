@@ -1,16 +1,12 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "../../users/entities/user.entity";
 import { Space } from "../../spaces/entities/space.entity";
-import { InvitationStates } from "../enum/invitation-states.enum";
-import { InvitationTypes } from "../enum/invitation-types.enum";
+import { ConnectionTypes } from "../enum/connection-types.enum";
 
 @Entity()
 export class ConnectedAccount {
@@ -19,9 +15,9 @@ export class ConnectedAccount {
 
   @Column({
     nullable: false,
-    default: InvitationTypes.instagram,
+    default: ConnectionTypes.instagram,
   })
-  accountType: InvitationTypes;
+  accountType: ConnectionTypes;
 
   @Column({ nullable: false })
   identifier: string;

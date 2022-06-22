@@ -19,16 +19,13 @@ export default function CreateInvitation({ open, setOpen, spaceSlug }: Props) {
 
   const mutation = useMutation(
     (newInvitation: any) => {
-      return postFetcher(
-        `/space/${spaceSlug}/connected-accounts/invitations`,
-        newInvitation
-      );
+      return postFetcher(`/space/${spaceSlug}/invitations`, newInvitation);
     },
     {
       onSuccess: (data) => {
         setOpen(false);
         queryClient.setQueryData(
-          `/space/${spaceSlug}/connected-accounts/invitations`,
+          `/space/${spaceSlug}/invitations`,
           (draft: any) => [...draft, data?.data]
         );
       },

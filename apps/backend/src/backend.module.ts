@@ -7,9 +7,10 @@ import { CoffeesModule } from "./coffees/coffees.module";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { SpacesModule } from "./spaces/spaces.module";
-import * as Joi from "@hapi/joi";
 import { ConnectedAccountsModule } from "./connected-accounts/connected-accounts.module";
-import { FacebookGraphModule } from './facebook-graph/facebook-graph.module';
+import { FacebookGraphModule } from "./facebook-graph/facebook-graph.module";
+import { InvitationsModule } from "./invitations/invitations.module";
+import * as Joi from "@hapi/joi";
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { FacebookGraphModule } from './facebook-graph/facebook-graph.module';
     SpacesModule,
     ConnectedAccountsModule,
     FacebookGraphModule,
+    InvitationsModule,
   ],
   controllers: [BackendController],
   providers: [BackendService],
