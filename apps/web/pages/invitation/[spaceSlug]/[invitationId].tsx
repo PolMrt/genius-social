@@ -2,17 +2,23 @@ import FbConnection from "@/components/invitations-user-flow/fbConnection";
 import InstagramAccount from "@/components/invitations-user-flow/instagramAccounts";
 import Pages from "@/components/invitations-user-flow/pages";
 import Steps from "@/components/invitations-user-flow/steps";
-import Button from "@/components/ui/button";
-import Layout from "@/components/ui/layout";
+import { postFetcher } from "@/utils/fetcher";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
-import FacebookLogin from "react-facebook-login";
+import { useMutation } from "react-query";
 
 export default function InvitationPage({ invitation }: any) {
   const [fbAT, setFbAT] = useState("");
   const [selectedPageId, setSelectedPageId] = useState("");
   const [selectedInstaId, setSelectedInstaId] = useState("");
   const [step, setStep] = useState(1);
+
+  const acceptInvitationMutation = useMutation((invitationData: any) =>
+    postFetcher(
+      `/space/${invitation.space.slug}/connected-accounts/invitations/accept/${invitation.uniqueId}`,
+      invitationData
+    )
+  );
 
   useEffect(() => {
     if (fbAT) {
@@ -29,7 +35,12 @@ export default function InvitationPage({ invitation }: any) {
   useEffect(() => {
     if (selectedInstaId) {
       setStep((prev) => (prev > 4 ? prev : 4));
-      alert("Connection ok, do backend needed actions");
+
+      acceptInvitationMutation.mutate({
+        instagramAccountId: selectedInstaId,
+        pageId: selectedPageId,
+        accessToken: fbAT,
+      });
     }
   }, [selectedInstaId]);
 
@@ -149,6 +160,13 @@ export default function InvitationPage({ invitation }: any) {
                 requestedAccountUsername={invitation.identifier}
                 setSelectedInstaId={setSelectedInstaId}
               />
+            ) : null}
+
+            {step === 4 ? (
+              <>
+                {acceptInvitationMutation.isLoading ? "Loading..." : null}
+                {acceptInvitationMutation.isError ? "An error occured" : null}
+              </>
             ) : null}
           </div>
         </div>

@@ -30,7 +30,9 @@ export const fbFetcher = ({ queryKey }: FbFetcher) => {
 export const postFetcher = (url: string, body: any) =>
   axios
     .post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`, body, {
-      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      headers: localStorage.getItem("token")
+        ? { Authorization: "Bearer " + localStorage.getItem("token") }
+        : {},
     })
     .catch((error) => {
       console.log(error.response.data);

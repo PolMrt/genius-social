@@ -9,6 +9,7 @@ import { UsersModule } from "./users/users.module";
 import { SpacesModule } from "./spaces/spaces.module";
 import * as Joi from "@hapi/joi";
 import { ConnectedAccountsModule } from "./connected-accounts/connected-accounts.module";
+import { FacebookGraphModule } from './facebook-graph/facebook-graph.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ConnectedAccountsModule } from "./connected-accounts/connected-accounts
     UsersModule,
     SpacesModule,
     ConnectedAccountsModule,
+    FacebookGraphModule,
   ],
   controllers: [BackendController],
   providers: [BackendService],

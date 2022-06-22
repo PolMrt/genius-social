@@ -1,3 +1,4 @@
+import { AcceptInvitationDto } from "./dto/accept-invitation.dto";
 import { GetInvitationsDto } from "./dto/get-invitations.dto";
 import { CreateInvitationDto } from "./dto/create-invitation.dto";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
@@ -43,6 +44,22 @@ export class ConnectedAccountsController {
     );
 
     return invitation;
+  }
+
+  @Post("invitations/accept/:id")
+  async acceptInvitation(
+    @Param("spaceSlug") spaceSlug: string,
+    @Param("id") invitationUniqueId: string,
+    @Body() acceptInvitationDto: AcceptInvitationDto
+  ) {
+    const acceptedInvitation =
+      await this.connectedAccountsService.acceptInvitation(
+        spaceSlug,
+        invitationUniqueId,
+        acceptInvitationDto
+      );
+
+    return acceptedInvitation;
   }
 
   @UseGuards(JwtAuthGuard)
