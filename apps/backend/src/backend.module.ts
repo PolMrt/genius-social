@@ -28,6 +28,11 @@ import * as Joi from "@hapi/joi";
         DATABASE_NAME: Joi.required(),
         JWT_SECRET: Joi.required(),
         HASH_SALT_ROUND: Joi.number().default(10).min(2).required(),
+        FB_APP_ID: Joi.string().required(),
+        FB_APP_SECRET: Joi.string().required(),
+        FB_V: Joi.string().required(),
+        ENCRYPT_KEY_SPACE: Joi.string().required(),
+        ENCRYPT_KEY_TOKEN: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({

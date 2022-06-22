@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import ReactCanvasConfetti from "react-canvas-confetti";
 import Button from "@/components/ui/button";
+import LoadingIndicator from "@/components/ui/loadingIndicator";
 
 export default function InvitationPage({ invitation }: any) {
   const [confState, setConfState] = useState({ fire: false, reset: false });
@@ -57,7 +58,7 @@ export default function InvitationPage({ invitation }: any) {
   }, [selectedInstaId]);
 
   return (
-    <main className="pt-6">
+    <main className="pt-6 pb-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-center font-sans2 text-2xl font-extrabold">
           {invitation.space.name}
@@ -143,7 +144,8 @@ export default function InvitationPage({ invitation }: any) {
           </ul>
         </div>
 
-        {acceptInvitationMutation.isSuccess ? (
+        {acceptInvitationMutation.isSuccess ||
+        invitation.state === "accepted" ? (
           <>
             <ReactCanvasConfetti
               className="fixed top-0 left-0 h-full w-full object-cover"
@@ -206,7 +208,13 @@ export default function InvitationPage({ invitation }: any) {
 
               {step === 4 ? (
                 <>
-                  {acceptInvitationMutation.isLoading ? "Loading..." : null}
+                  {acceptInvitationMutation.isLoading ? (
+                    <div className="flex items-center justify-center text-gray-700">
+                      <div>
+                        <LoadingIndicator />
+                      </div>
+                    </div>
+                  ) : null}
                   {acceptInvitationMutation.isError ? "An error occured" : null}
                 </>
               ) : null}

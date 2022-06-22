@@ -2,13 +2,67 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { HttpService } from "@nestjs/axios";
 import { first, firstValueFrom } from "rxjs";
+import cryptoJs from "crypto-js";
 
+type DecrypToken = {
+  accessToken: string;
+  spaceSlug: string;
+};
 @Injectable()
 export class FacebookGraphService {
+  tokenSeparator: string;
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService
-  ) {}
+  ) {
+    this.tokenSeparator = "||d-b||";
+  }
+
+  encryptToken(accessToken: string, spaceSlug: string): string {
+    const spaceKey = this.configService.get<string>("ENCRYPT_KEY_SPACE");
+    const tokenKey = this.configService.get<string>("ENCRYPT_KEY_TOKEN");
+
+    if (!spaceKey || !tokenKey) {
+      throw new Error("Missing encryptions key(s)");
+    }
+
+    const tokenEncrypted = cryptoJs.AES.encrypt(
+      accessToken,
+      tokenKey
+    ).toString();
+    const tokenFullyEncrypted = cryptoJs.AES.encrypt(
+      spaceSlug + this.tokenSeparator + tokenEncrypted,
+      spaceKey
+    ).toString();
+
+    return tokenFullyEncrypted;
+  }
+
+  decryptToken(token: string): DecrypToken {
+    const spaceKey = this.configService.get<string>("ENCRYPT_KEY_SPACE");
+    const tokenKey = this.configService.get<string>("ENCRYPT_KEY_TOKEN");
+
+    if (!spaceKey || !tokenKey) {
+      throw new Error("Missing encryptions key(s)");
+    }
+
+    const decoded_1 = cryptoJs.AES.decrypt(token, spaceKey).toString(
+      cryptoJs.enc.Utf8
+    );
+    const splited = decoded_1.split(this.tokenSeparator);
+
+    if (splited.length < 2) {
+      throw new Error("Error while decrypting token");
+    }
+
+    const spaceSlug = splited[0];
+    const tokenEcrypted = splited[1];
+    const accessToken = cryptoJs.AES.decrypt(tokenEcrypted, tokenKey).toString(
+      cryptoJs.enc.Utf8
+    );
+
+    return { spaceSlug, accessToken };
+  }
 
   async getUserPages(accessToken: string) {
     const data = await this.fetcher("/me/accounts", accessToken);

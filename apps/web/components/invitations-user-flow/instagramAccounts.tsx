@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import Button from "../ui/button";
+import LoadingIndicator from "../ui/loadingIndicator";
 
 type Props = {
   accessToken: string;
@@ -54,7 +55,13 @@ export default function InstagramAccount({
     getInstagramAccountInfos.isLoading ||
     getInstagramAccountInfos.isIdle
   ) {
-    return <span>Loading...</span>;
+    return (
+      <div className="flex items-center justify-center text-gray-700">
+        <div>
+          <LoadingIndicator />
+        </div>
+      </div>
+    );
   }
 
   if (getInstagramAccounts.isError || getInstagramAccountInfos.isError) {
@@ -70,13 +77,16 @@ export default function InstagramAccount({
               <img
                 className="h-12 w-12 rounded-full"
                 src={getInstagramAccountInfos.data.data.profile_picture_url}
+                alt={`Instagram profile picture of @${getInstagramAccountInfos.data.data.username}`}
               />
             </div>
             <div>
-              <h3>{getInstagramAccountInfos.data.data.name}</h3>
-              <h4 className="text-sm text-gray-500">
+              <div className="font-bold">
+                {getInstagramAccountInfos.data.data.name}
+              </div>
+              <div className="text-sm text-gray-500">
                 @{getInstagramAccountInfos.data.data.username}
-              </h4>
+              </div>
             </div>
           </div>
 

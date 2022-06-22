@@ -31,7 +31,7 @@ export class ConnectedAccount {
   @Column({ length: 2000 })
   profilePictureUrl: string;
 
-  @Column({ select: false })
+  @Column({ select: false, length: 2000 })
   token: string;
 
   @ManyToOne(() => Space, (space) => space.connectedAccounts)

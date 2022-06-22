@@ -137,7 +137,7 @@ export class InvitationsService {
       accountType: invitation.accountType,
       space: invitation.space,
       expires: expires,
-      token: llToken.access_token,
+      token: this.fbGraphService.encryptToken(llToken.access_token, spaceSlug),
       identifier: instagramAccountInformations.username,
       profilePictureUrl: instagramAccountInformations.profile_picture_url,
       name: instagramAccountInformations.name,
