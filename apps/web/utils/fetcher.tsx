@@ -42,7 +42,11 @@ export const postFetcher = (url: string, body: any) =>
         error.response.data.message &&
         error.response.data.message.length > 0
       ) {
-        throw new ApiFormatedError(error.response.data.message);
+        if (typeof error.response.data.message === "object") {
+          throw new ApiFormatedError(error.response.data.message);
+        } else {
+          throw new ApiFormatedError([error.response.data.message]);
+        }
       } else if (error.request) {
         throw new Error("An error occured");
       }

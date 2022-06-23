@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "react-query";
 import Button, { ButtonStyles } from "@/components/ui/button";
 import { postFetcher } from "@/utils/fetcher";
 import { ApiFormatedError } from "utils/fetcher";
+import ApiError from "../ui/apiError";
 
 type Props = {
   open: boolean;
@@ -101,20 +102,11 @@ export default function CreateInvitation({ open, setOpen, spaceSlug }: Props) {
                         <div className="divide-y divide-gray-200 px-4 sm:px-6">
                           <div className="space-y-6 pt-6 pb-5">
                             {mutation.isError ? (
-                              <div>
-                                An error occured :
-                                {mutation.error instanceof ApiFormatedError ? (
-                                  <ul className="list-inside list-disc">
-                                    {mutation.error.messages.map(
-                                      (thisMessage) => (
-                                        <li key={thisMessage}>{thisMessage}</li>
-                                      )
-                                    )}
-                                  </ul>
-                                ) : (
-                                  mutation.error
-                                )}
-                              </div>
+                              mutation.error instanceof ApiFormatedError ? (
+                                <ApiError error={mutation.error} />
+                              ) : (
+                                mutation.error
+                              )
                             ) : null}
 
                             <div>

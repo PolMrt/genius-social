@@ -1,6 +1,6 @@
 import { useState } from "react";
-import CreateInvitation from "@/components/connected-accounts/invitations/create";
-import AllConnectedAccounts from "@/components/connected-accounts/invitations/list";
+import CreateInvitation from "@/components/invitations/create";
+import AllConnectedAccounts from "@/components/invitations/list";
 import Button from "@/components/ui/button";
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import withAuth from "hoc/auth";

@@ -30,14 +30,14 @@ export class UsersService {
   ): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
-      select: options.selectPassword ? ["password"] : [],
       relations: options.includeSpaces ? ["spaces"] : [],
     });
+
     if (!user) {
       throw new HttpException("No user with that id", HttpStatus.NOT_FOUND);
     }
 
-    return user;
+    return options.selectPassword ? this.userWithPassword(user) : user;
   }
 
   async findOne(
@@ -46,13 +46,26 @@ export class UsersService {
   ): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { mail: mail },
-      select: options.selectPassword ? ["password"] : [],
       relations: options.includeSpaces ? ["spaces"] : [],
     });
+
     if (!user) {
       throw new HttpException("No user with that mail", HttpStatus.NOT_FOUND);
     }
 
-    return user;
+    return options.selectPassword ? this.userWithPassword(user) : user;
+  }
+
+  async userWithPassword(user: User) {
+    const userWithPassword = await this.userRepository.findOne({
+      where: { id: user.id },
+      select: ["password"],
+    });
+
+    if (!userWithPassword) {
+      throw new HttpException("No user found", HttpStatus.NOT_FOUND);
+    }
+
+    return { ...user, password: userWithPassword.password };
   }
 }

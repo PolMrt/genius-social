@@ -1,6 +1,6 @@
 import { ConfigService } from "@nestjs/config";
 import bcrypt from "bcrypt";
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "../users/entities/user.entity";
@@ -8,29 +8,34 @@ import { User } from "../users/entities/user.entity";
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService
   ) {}
 
   async validateUser(mail: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(mail, {
-      selectPassword: true,
-    });
+    try {
+      const user = await this.usersService.findOne(mail, {
+        selectPassword: true,
+      });
 
-    if (user) {
       const isSamePassword = await bcrypt.compare(pass, user.password);
       if (isSamePassword) {
         const { password, ...result } = user;
         return result;
+      } else {
+        throw new Error();
       }
+    } catch (e) {
+      throw new HttpException("Wrong email or password", HttpStatus.FORBIDDEN);
     }
+
     return null;
   }
 
-  async login(user: User) {
+  async login(user: any) {
     const payload = { mail: user.mail, sub: user.id };
     return {
+      user,
       access_token: this.jwtService.sign(payload),
     };
   }
