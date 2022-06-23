@@ -4,6 +4,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
@@ -24,4 +25,7 @@ export class User {
   @JoinTable()
   @ManyToMany(() => Space, (space) => space.users)
   spaces: Space[];
+
+  @ManyToOne(() => Space, { eager: true })
+  favoritSpace: Space;
 }

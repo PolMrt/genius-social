@@ -17,7 +17,11 @@ export default function Login() {
           localStorage.setItem("token", data.data.access_token);
           queryClient.setQueryData("/users/me", () => data.data.user);
 
-          router.push("/");
+          if (data.data.user?.favoritSpace?.slug) {
+            router.push("/" + data.data.user.favoritSpace.slug);
+          } else {
+            router.push("/");
+          }
         }
       },
       onError: (error) => {

@@ -107,20 +107,22 @@ function Card({ account, spaceSlug }: CardProps) {
             <h3 className="truncate text-sm font-bold text-gray-900">
               {account.name}
             </h3>
-            <span
-              className={classNames(
-                color,
-                "inline-block flex-shrink-0 rounded-full  px-2 py-0.5 text-xs font-medium"
-              )}
-            >
-              {daysExpires > 0 ? (
-                <>
-                  Expires in {daysExpires} day{daysExpires > 1 ? "s" : ""}
-                </>
-              ) : (
-                <>Expired</>
-              )}
-            </span>
+            {account.expires ? (
+              <span
+                className={classNames(
+                  color,
+                  "inline-block flex-shrink-0 rounded-full  px-2 py-0.5 text-xs font-medium"
+                )}
+              >
+                {daysExpires > 0 ? (
+                  <>
+                    Expires in {daysExpires} day{daysExpires > 1 ? "s" : ""}
+                  </>
+                ) : (
+                  <>Expired</>
+                )}
+              </span>
+            ) : null}
           </div>
           <p className="mt-1 truncate text-sm text-gray-500">
             @{account.identifier}

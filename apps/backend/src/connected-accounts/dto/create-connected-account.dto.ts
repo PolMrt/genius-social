@@ -4,6 +4,7 @@ import { ConnectionTypes } from "../enum/connection-types.enum";
 
 export class CreateConnectedAccountDto {
   readonly identifier: string;
+  readonly plateformId: string;
   readonly accountType: ConnectionTypes;
   readonly expires: Date;
   readonly name: string;

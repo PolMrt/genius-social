@@ -22,7 +22,10 @@ export class ConnectedAccount {
   @Column({ nullable: false })
   identifier: string;
 
-  @Column()
+  @Column({ nullable: false })
+  plateformId: string;
+
+  @Column({ nullable: true })
   expires: Date;
 
   @Column()

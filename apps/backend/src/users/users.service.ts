@@ -56,10 +56,10 @@ export class UsersService {
     return options.selectPassword ? this.userWithPassword(user) : user;
   }
 
-  async userWithPassword(user: User) {
+  async userWithPassword(user: User): Promise<User> {
     const userWithPassword = await this.userRepository.findOne({
       where: { id: user.id },
-      select: ["password"],
+      select: ["id", "password"],
     });
 
     if (!userWithPassword) {

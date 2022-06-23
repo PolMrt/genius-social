@@ -103,6 +103,17 @@ export class FacebookGraphService {
     return data.data;
   }
 
+  async getInstagramInformationsWithStats(
+    accessToken: string,
+    instagramAccountId: string
+  ) {
+    const data = await this.fetcher(
+      `/${instagramAccountId}?fields=biography,followers_count,follows_count,website`,
+      accessToken
+    );
+    return data.data;
+  }
+
   private fetcher(url: string, accessToken: string) {
     const fetchUrl = new URL(
       `https://graph.facebook.com/v${this.configService.get<string>(

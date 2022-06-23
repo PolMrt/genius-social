@@ -18,4 +18,35 @@ export class ConnectedAccountsController {
       );
     return connectedAccounts;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id")
+  async findOne(
+    @Param("id") id: number,
+    @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string
+  ) {
+    const connectedAccounts =
+      await this.connectedAccountsService.getConnectedAccount(
+        id,
+        spaceSlug,
+        req.userId
+      );
+    return connectedAccounts;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/account-informations")
+  async accountInformations(
+    @Param("id") id: number,
+    @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string
+  ) {
+    const infos = await this.connectedAccountsService.getAccountInformations(
+      id,
+      spaceSlug,
+      req.userId
+    );
+    return infos;
+  }
 }

@@ -15,6 +15,11 @@ type Tab = {
   href: string;
 };
 
+type TabsLinkEnricher = {
+  name: string;
+  value: string;
+};
+
 type Props = {
   children: ReactNode;
   title: string;
@@ -22,6 +27,7 @@ type Props = {
   currentSpaceSlug?: string | null;
   actions?: ReactNode[];
   tabs?: Tab[];
+  tabsLinkEnricher?: TabsLinkEnricher[];
 };
 
 export default function Sidebar({
@@ -31,6 +37,7 @@ export default function Sidebar({
   currentSpaceSlug = null,
   actions = [],
   tabs = [],
+  tabsLinkEnricher = [],
 }: Props) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -61,15 +68,24 @@ export default function Sidebar({
 
   const tabsWithCurrent = useMemo(() => {
     if (!currentSpaceSlug) return [];
-    const tabsToRet = tabs.map((thisTab) => ({
-      ...thisTab,
-      href: thisTab.href.replace("[spaceSlug]", currentSpaceSlug),
-    }));
+    const tabsToRet = tabs.map((thisTab) => {
+      let href = thisTab.href;
+
+      href = href.replace("[spaceSlug]", currentSpaceSlug);
+      tabsLinkEnricher.forEach((linkEnricher) => {
+        href = href.replace(`[${linkEnricher.name}]`, linkEnricher.value);
+      });
+
+      return {
+        ...thisTab,
+        href,
+      };
+    });
     return tabsToRet.map((thisTab) => ({
       ...thisTab,
       current: router.asPath === thisTab.href,
     }));
-  }, [currentSpaceSlug, router, tabs]);
+  }, [currentSpaceSlug, router, tabs, tabsLinkEnricher]);
 
   return (
     <>

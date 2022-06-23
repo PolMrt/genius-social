@@ -141,6 +141,7 @@ export class InvitationsService {
       identifier: instagramAccountInformations.username,
       profilePictureUrl: instagramAccountInformations.profile_picture_url,
       name: instagramAccountInformations.name,
+      plateformId: instagramAccountInformations.id,
     });
 
     const editedInvitation = await this.invitationRepository.preload({

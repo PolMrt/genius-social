@@ -7,7 +7,7 @@ const withAuth = () => (Component: React.ElementType) => {
   function Authinner() {
     const router = useRouter();
     const [checkedToken, setCheckedToken] = useState(false);
-    const userQuery = useQuery(`/users/me`, fetcher, {
+    const userQuery = useQuery("/users/me", fetcher, {
       enabled: checkedToken,
       onError: (err) => {
         localStorage.removeItem("token");
