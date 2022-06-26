@@ -7,7 +7,6 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import ReactCanvasConfetti from "react-canvas-confetti";
-import Button from "@/components/ui/button";
 import LoadingIndicator from "@/components/ui/loadingIndicator";
 
 export default function InvitationPage({ invitation }: any) {
