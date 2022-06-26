@@ -56,7 +56,6 @@ export default function Login() {
               Sign in to your account
             </h2>
           </div>
-          {process.env.NEXT_PUBLIC_API_ENDPOINT}
           {mutation.isError && mutation.error instanceof ApiFormatedError ? (
             <ApiError error={mutation.error} />
           ) : null}
