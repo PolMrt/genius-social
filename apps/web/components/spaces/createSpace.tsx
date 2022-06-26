@@ -3,9 +3,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import slugify from "slugify";
 import { useMutation, useQueryClient } from "react-query";
-
 import Button, { ButtonStyles } from "@/components/ui/button";
 import { ApiFormatedError, postFetcher } from "@/utils/fetcher";
+import { useRouter } from "next/router";
 
 type Props = {
   open: boolean;
@@ -13,6 +13,7 @@ type Props = {
 };
 
 export default function Createspace({ open, setOpen }: Props) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [spaceName, setSpaceName] = useState("");
   const [spaceSlug, setSpaceSlug] = useState("");
@@ -33,6 +34,7 @@ export default function Createspace({ open, setOpen }: Props) {
           ...draft,
           data?.data,
         ]);
+        router.push(data?.data.slug);
       },
     }
   );
