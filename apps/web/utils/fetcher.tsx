@@ -24,6 +24,7 @@ export const fbFetcher = ({ queryKey }: FbFetcher) => {
     `https://graph.facebook.com/v${process.env.NEXT_PUBLIC_FB_V}${queryKey[0]}`
   );
   url.searchParams.append("access_token", queryKey[1]);
+  url.searchParams.append("locale", "en");
   return axios.get(url.href);
 };
 

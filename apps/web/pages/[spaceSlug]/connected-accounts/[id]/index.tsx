@@ -1,6 +1,9 @@
 import AccountInfos from "@/components/insights/account-informations";
+import AccountInsights from "@/components/insights/account-insights";
+import Button from "@/components/ui/button";
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import fetcher from "@/utils/fetcher";
+import { ExternalLinkIcon } from "@heroicons/react/outline";
 import withAuth from "hoc/auth";
 import withSpaceData from "hoc/space";
 import { useRouter } from "next/router";
@@ -12,14 +15,10 @@ export const tabs = [
     name: "Account informations",
     href: `/[spaceSlug]/connected-accounts/[id]`,
   },
-  {
-    name: "Account insights",
-    href: `/[spaceSlug]/connected-accounts/[id]/account-insight`,
-  },
-  {
-    name: "Posts insights",
-    href: `/[spaceSlug]/connected-accounts/[id]/posts-insight`,
-  },
+  // {
+  //   name: "Posts insights",
+  //   href: `/[spaceSlug]/connected-accounts/[id]/posts-insight`,
+  // },
 ];
 
 function InsightAccountPage({ space }: any) {
@@ -49,11 +48,23 @@ function InsightAccountPage({ space }: any) {
       tabs={tabs}
       title={accountDetails.data.name}
       tabsLinkEnricher={[{ name: "id", value: router.query.id }]}
+      actions={[
+        <Button
+          onClick={() =>
+            window.open(
+              "https://instagram.com/" + accountDetails.data.identifier,
+              "_blank"
+            )
+          }
+        >
+          Instagram <ExternalLinkIcon className="ml-2 h-5 w-5" />
+        </Button>,
+      ]}
     >
-      <AccountInfos
+      <AccountInfos spaceSlug={space.slug} accountId={accountDetails.data.id} />
+      <AccountInsights
         spaceSlug={space.slug}
         accountId={accountDetails.data.id}
-        plateformId={accountDetails.data.plateformId}
       />
     </Sidebar>
   );

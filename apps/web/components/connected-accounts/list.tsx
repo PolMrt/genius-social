@@ -67,7 +67,7 @@ export default function ConnectedAccountsList({ spaceSlug }: Props) {
         ></path>
       </svg>
       <span className="mt-2 block text-sm font-medium text-gray-900">
-        You&apos;ve sent no connected accounts
+        You&apos;ve got no connected accounts
       </span>
     </div>
   );

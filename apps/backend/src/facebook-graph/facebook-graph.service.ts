@@ -83,7 +83,7 @@ export class FacebookGraphService {
     instagramAccountId: string
   ) {
     const data = await this.fetcher(
-      `/${instagramAccountId}?fields=name,profile_picture_url,username`,
+      `/${instagramAccountId}?fields=name,profile_picture_url,username,biography,followers_count,follows_count,website,media_count`,
       accessToken
     );
 
@@ -103,12 +103,9 @@ export class FacebookGraphService {
     return data.data;
   }
 
-  async getInstagramInformationsWithStats(
-    accessToken: string,
-    instagramAccountId: string
-  ) {
+  async getGeneralIGInsights(accessToken: string, instagramAccountId: string) {
     const data = await this.fetcher(
-      `/${instagramAccountId}?fields=biography,followers_count,follows_count,website`,
+      `/${instagramAccountId}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime`,
       accessToken
     );
     return data.data;
@@ -121,6 +118,7 @@ export class FacebookGraphService {
       )}${url}`
     );
     fetchUrl.searchParams.append("access_token", accessToken);
+    fetchUrl.searchParams.append("locale", "en");
 
     return firstValueFrom(this.httpService.get(fetchUrl.href));
   }

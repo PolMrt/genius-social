@@ -69,12 +69,17 @@ export class ConnectedAccountsService {
       throw new Error("An error occured");
     }
 
-    const fbInfos = await this.fbServive.getInstagramInformationsWithStats(
+    const fbInfos = await this.fbServive.getInstagramBusinessAccountInfos(
       rawToken.accessToken,
       connectedAccount.plateformId
     );
 
-    return fbInfos;
+    const insights = await this.fbServive.getGeneralIGInsights(
+      rawToken.accessToken,
+      connectedAccount.plateformId
+    );
+
+    return { infos: fbInfos, insights };
   }
 
   async getConnectedAccountWithToken(connectedAccount: ConnectedAccount) {
