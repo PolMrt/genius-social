@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function AccountInfos({ spaceSlug, accountId }: Props) {
-  const [bioURL, setBioURL] = useState(null);
+  const [bioURL, setBioURL] = useState<null | URL>(null);
   const accountInfos = useQuery(
     `/space/${spaceSlug}/connected-accounts/${accountId}/account-informations`,
     fetcher,
@@ -72,8 +72,9 @@ export default function AccountInfos({ spaceSlug, accountId }: Props) {
           {bioURL && bioURL instanceof URL ? (
             <a
               className="text-blue-900"
-              href={accountInfos.data.infos.website}
+              href={bioURL.href}
               target="_blank"
+              rel="noreferrer"
             >
               {bioURL.host + bioURL.pathname}
             </a>

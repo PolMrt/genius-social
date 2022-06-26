@@ -87,7 +87,7 @@ export default function AllConnectedAccounts({ spaceSlug }: Props) {
         ></path>
       </svg>
       <span className="mt-2 block text-sm font-medium text-gray-900">
-        You've sent no invitations
+        You&apos;ve sent no invitations
       </span>
     </div>
   );

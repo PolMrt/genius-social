@@ -2,33 +2,42 @@ import { ArrowDownIcon } from "@heroicons/react/outline";
 import { useMemo, useState } from "react";
 import Button from "../ui/button";
 
-export default function BarChart({ value, withShowMore = false }: any) {
+type Bar = {
+  name: string;
+  value: number;
+  percentage: number;
+};
+
+type Props = {
+  bars: Bar[];
+  withShowMore?: boolean;
+};
+
+export default function BarChart({ bars, withShowMore = false }: Props) {
   const [showMore, setShowMore] = useState(false);
   const data = useMemo(() => {
     if (withShowMore && !showMore) {
-      return Object.fromEntries(
-        Object.entries(value).filter((el, index) => index < 5)
-      );
+      return bars.filter((el, index) => index < 5);
     } else {
-      return value;
+      return bars;
     }
-  }, [value, withShowMore, showMore]);
+  }, [bars, withShowMore, showMore]);
 
   return (
     <div>
       <ul className="space-y-1">
-        {Object.entries(data).map(([key, value]) => (
-          <li>
-            <div className="font-medium">{key}</div>
+        {bars.map((thisBar: Bar) => (
+          <li key={thisBar.name}>
+            <div className="font-medium">{thisBar.name}</div>
             <div className="relative mt-1 h-2 w-full overflow-hidden bg-gray-300">
               <div
                 className="absolute left-0 h-2 rounded-r-full bg-dark-blue"
-                style={{ width: value.percentage + "%" }}
+                style={{ width: thisBar.percentage + "%" }}
               ></div>
             </div>
             <div className="mt-1 text-right text-sm text-gray-500">
-              {value.nb} | {(Math.round(value.percentage * 10) / 10).toFixed(1)}
-              %
+              {thisBar.value} |{" "}
+              {(Math.round(thisBar.percentage * 10) / 10).toFixed(1)}%
             </div>
           </li>
         ))}

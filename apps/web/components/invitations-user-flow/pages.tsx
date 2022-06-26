@@ -51,7 +51,7 @@ export default function Pages({
               Select your Facebook page
             </RadioGroup.Label>
             <div className="space-y-4">
-              {getPages.data.data.data.map((thisPage) => (
+              {getPages?.data?.data?.data?.map((thisPage: any) => (
                 <RadioGroup.Option
                   key={thisPage.id}
                   value={thisPage.id}

@@ -55,7 +55,7 @@ export default function InvitationPage({ invitation }: any) {
         accessToken: fbAT,
       });
     }
-  }, [selectedInstaId]);
+  }, [selectedInstaId, acceptInvitationMutation, fbAT, selectedPageId]);
 
   return (
     <main className="pt-6 pb-24">

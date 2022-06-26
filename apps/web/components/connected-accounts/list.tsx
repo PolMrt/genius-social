@@ -1,15 +1,8 @@
-import Button, { ButtonStyles } from "@/components/ui/button";
-import fetcher, { deleteFetcher } from "@/utils/fetcher";
-import {
-  ChartBarIcon,
-  ExternalLinkIcon,
-  MailIcon,
-  PhoneIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import fetcher from "@/utils/fetcher";
+import { ChartBarIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import * as dayjs from "dayjs";
+import { useQuery } from "react-query";
+import dayjs from "dayjs";
 import { useMemo } from "react";
 import classNames from "classnames";
 
@@ -32,7 +25,7 @@ export default function ConnectedAccountsList({ spaceSlug }: Props) {
         role="list"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {data.map((thisAccount) => (
+        {data.map((thisAccount: any) => (
           <Card
             key={thisAccount.id}
             account={thisAccount}

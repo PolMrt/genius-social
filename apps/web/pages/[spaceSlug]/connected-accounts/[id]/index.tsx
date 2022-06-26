@@ -47,7 +47,7 @@ function InsightAccountPage({ space }: any) {
       currentSpaceSlug={space.slug}
       tabs={tabs}
       title={accountDetails.data.name}
-      tabsLinkEnricher={[{ name: "id", value: router.query.id }]}
+      tabsLinkEnricher={[{ name: "id", value: "" + router.query.id }]}
       actions={[
         <Button
           onClick={() =>

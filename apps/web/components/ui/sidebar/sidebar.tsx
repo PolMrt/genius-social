@@ -235,7 +235,7 @@ export default function Sidebar({
               </nav>
             </div>
             <div className="mb-4 px-4">
-              <SpacesSelector currentSpace={currentSpace} />
+              <SpacesSelector currentSpace={currentSpace || ""} />
             </div>
             <div className="flex flex-shrink-0 border-t border-dark-blue-800 p-4">
               <div className="group block w-full flex-shrink-0">

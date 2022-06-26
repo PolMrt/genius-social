@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import React, { ReactNode, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
-const withAuth = () => (Component: React.ElementType) => {
-  function Authinner() {
+const withAuth = () => (Component: any) => {
+  function AuthInner() {
     const router = useRouter();
     const [checkedToken, setCheckedToken] = useState(false);
+
     const userQuery = useQuery("/users/me", fetcher, {
       enabled: checkedToken,
       onError: (err) => {
@@ -17,15 +18,15 @@ const withAuth = () => (Component: React.ElementType) => {
 
     useEffect(() => {
       if (!localStorage.getItem("token")) {
-        return router.push("/login");
+        router.push("/login");
       } else {
         setCheckedToken(true);
       }
     }, [router]);
 
-    return userQuery.isLoading ? "loading" : <Component />;
+    return userQuery.isLoading ? <>loading</> : <Component />;
   }
-  return Authinner;
+  return AuthInner;
 };
 
 export default withAuth;
