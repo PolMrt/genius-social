@@ -15,18 +15,20 @@ type Props = {
 
 export default function BarChart({ bars, withShowMore = false }: Props) {
   const [showMore, setShowMore] = useState(false);
+
   const data = useMemo(() => {
+    let sorted = bars.sort((a, b) => b.value - a.value);
     if (withShowMore && !showMore) {
-      return bars.filter((el, index) => index < 5);
+      return sorted.filter((el, index) => index < 5);
     } else {
-      return bars;
+      return sorted;
     }
   }, [bars, withShowMore, showMore]);
 
   return (
     <div>
       <ul className="space-y-1">
-        {bars.map((thisBar: Bar) => (
+        {data.map((thisBar: Bar) => (
           <li key={thisBar.name}>
             <div className="font-medium">{thisBar.name}</div>
             <div className="relative mt-1 h-2 w-full overflow-hidden bg-gray-300">
