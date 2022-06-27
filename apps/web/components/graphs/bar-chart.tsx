@@ -1,4 +1,5 @@
 import { ArrowDownIcon } from "@heroicons/react/outline";
+import classNames from "classnames";
 import { useMemo, useState } from "react";
 import Button from "../ui/button";
 
@@ -31,7 +32,7 @@ export default function BarChart({
   }, [bars, withShowMore, showMore, ordered]);
 
   return (
-    <div>
+    <div className="relative">
       <ul className="space-y-1">
         {data.map((thisBar: Bar) => (
           <li key={thisBar.name}>
@@ -51,10 +52,16 @@ export default function BarChart({
       </ul>
 
       {withShowMore ? (
-        <div className="flex justify-center">
+        <div
+          className={classNames("bottom-0 flex h-auto justify-center", {
+            "sticky bg-gradient-to-t from-white to-white/25 py-2": showMore,
+          })}
+        >
           <Button
             onClick={() => setShowMore((prev) => !prev)}
-            className="inline-flex items-center"
+            className={classNames("inline-flex items-center", {
+              // "shadow-xxl": showMore,
+            })}
           >
             {showMore ? (
               <>
