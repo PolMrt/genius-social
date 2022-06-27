@@ -2,13 +2,14 @@ import FbConnection from "@/components/invitations-user-flow/fbConnection";
 import InstagramAccount from "@/components/invitations-user-flow/instagramAccounts";
 import Pages from "@/components/invitations-user-flow/pages";
 import Steps from "@/components/invitations-user-flow/steps";
-import { postFetcher } from "@/utils/fetcher";
+import { ApiFormatedError, postFetcher } from "@/utils/fetcher";
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import ReactCanvasConfetti from "react-canvas-confetti";
 import LoadingIndicator from "@/components/ui/loadingIndicator";
 import Button from "@/components/ui/button";
+import ApiError from "@/components/ui/apiError";
 
 export default function InvitationPage({ invitation }: any) {
   const [confState, setConfState] = useState({ fire: false, reset: false });
@@ -218,7 +219,16 @@ export default function InvitationPage({ invitation }: any) {
                       </div>
                     </div>
                   ) : null}
-                  {acceptInvitationMutation.isError ? "An error occured" : null}
+                  {acceptInvitationMutation.isError ? (
+                    <>
+                      {acceptInvitationMutation.error instanceof
+                      ApiFormatedError ? (
+                        <ApiError error={acceptInvitationMutation.error} />
+                      ) : (
+                        "An error occured"
+                      )}{" "}
+                    </>
+                  ) : null}
                 </>
               ) : null}
             </div>

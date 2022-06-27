@@ -61,7 +61,7 @@ export class ConnectedAccountsService {
     });
     if (ca) {
       throw new HttpException(
-        "This account is already connected",
+        "This account is already connected with this space",
         HttpStatus.CONFLICT
       );
     }
