@@ -64,6 +64,11 @@ export class FacebookGraphService {
     return { spaceSlug, accessToken };
   }
 
+  async getUserInfo(accessToken: string) {
+    const data = await this.fetcher("/me?fields=email,name", accessToken);
+    return data.data;
+  }
+
   async getUserPages(accessToken: string) {
     const data = await this.fetcher("/me/accounts", accessToken);
     return data.data;

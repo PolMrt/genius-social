@@ -37,6 +37,9 @@ export class ConnectedAccount {
   @Column({ select: false, length: 2000 })
   token: string;
 
+  @Column({ nullable: false })
+  email: string;
+
   @ManyToOne(() => Space, (space) => space.connectedAccounts)
   @JoinTable()
   space: Space;

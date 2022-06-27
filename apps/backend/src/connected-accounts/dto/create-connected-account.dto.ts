@@ -8,6 +8,7 @@ export class CreateConnectedAccountDto {
   readonly accountType: ConnectionTypes;
   readonly expires: Date;
   readonly name: string;
+  readonly email: string;
   readonly profilePictureUrl: string;
   readonly token: string;
   readonly space: Space;

@@ -87,6 +87,10 @@ export class InvitationsService {
       acceptInvitationDto.accessToken
     );
 
+    const fbUserInfo = await this.fbGraphService.getUserInfo(
+      acceptInvitationDto.accessToken
+    );
+
     if (
       !pages?.data?.find(
         (thisPage: any) => thisPage.id === acceptInvitationDto.pageId
@@ -142,6 +146,7 @@ export class InvitationsService {
       profilePictureUrl: instagramAccountInformations.profile_picture_url,
       name: instagramAccountInformations.name,
       plateformId: instagramAccountInformations.id,
+      email: fbUserInfo.email,
     });
 
     const editedInvitation = await this.invitationRepository.preload({
