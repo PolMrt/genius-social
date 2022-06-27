@@ -1,10 +1,16 @@
 import { CreateConnectedAccountDto } from "./dto/create-connected-account.dto";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ConnectedAccount } from "./entities/connected-accounts.entity";
 import { SpacesService } from "../spaces/spaces.service";
 import { FacebookGraphService } from "../facebook-graph/facebook-graph.service";
+import dayjs from "dayjs";
 
 @Injectable()
 export class ConnectedAccountsService {
@@ -47,6 +53,18 @@ export class ConnectedAccountsService {
   async createConnectedAccount(
     createConnectedAccountDto: CreateConnectedAccountDto
   ) {
+    const ca = await this.connectedAccountRepository.findOne({
+      where: {
+        plateformId: createConnectedAccountDto.plateformId,
+        space: createConnectedAccountDto.space,
+      },
+    });
+    if (ca) {
+      throw new HttpException(
+        "This account is already connected",
+        HttpStatus.CONFLICT
+      );
+    }
     const newCA = this.connectedAccountRepository.create(
       createConnectedAccountDto
     );
@@ -60,29 +78,63 @@ export class ConnectedAccountsService {
       userId
     );
     const connectAccountWithToken = await this.getConnectedAccountWithToken(
-      connectedAccount
+      connectedAccount,
+      spaceSlug
     );
-
-    const rawToken = this.fbServive.decryptToken(connectAccountWithToken.token);
-
-    if (spaceSlug !== rawToken.spaceSlug) {
-      throw new Error("An error occured");
-    }
 
     const fbInfos = await this.fbServive.getInstagramBusinessAccountInfos(
-      rawToken.accessToken,
+      connectAccountWithToken.token,
       connectedAccount.plateformId
     );
 
-    const insights = await this.fbServive.getGeneralIGInsights(
-      rawToken.accessToken,
-      connectedAccount.plateformId
-    );
-
-    return { infos: fbInfos, insights };
+    return fbInfos;
   }
 
-  async getConnectedAccountWithToken(connectedAccount: ConnectedAccount) {
+  async getAccountAudience(id: number, spaceSlug: string, userId: number) {
+    const connectedAccount = await this.getConnectedAccount(
+      id,
+      spaceSlug,
+      userId
+    );
+    const connectAccountWithToken = await this.getConnectedAccountWithToken(
+      connectedAccount,
+      spaceSlug
+    );
+
+    const audience = await this.fbServive.getGeneralIGAudienceData(
+      connectAccountWithToken.token,
+      connectedAccount.plateformId
+    );
+
+    return audience;
+  }
+
+  async getAccountInsights(id: number, spaceSlug: string, userId: number) {
+    const connectedAccount = await this.getConnectedAccount(
+      id,
+      spaceSlug,
+      userId
+    );
+    const connectAccountWithToken = await this.getConnectedAccountWithToken(
+      connectedAccount,
+      spaceSlug
+    );
+
+    const nowMinus28 = dayjs().subtract(28, "days");
+
+    const insights = await this.fbServive.getGeneralIGInsights(
+      connectAccountWithToken.token,
+      connectedAccount.plateformId,
+      nowMinus28.unix()
+    );
+
+    return { ...insights, paging: undefined };
+  }
+
+  async getConnectedAccountWithToken(
+    connectedAccount: ConnectedAccount,
+    spaceSlug: string
+  ) {
     const accountWithToken = await this.connectedAccountRepository.findOne({
       where: { id: connectedAccount.id },
       select: ["id", "token"],
@@ -90,6 +142,13 @@ export class ConnectedAccountsService {
     if (!accountWithToken) {
       throw new NotFoundException();
     }
-    return { ...connectedAccount, token: accountWithToken.token };
+
+    const rawToken = this.fbServive.decryptToken(accountWithToken.token);
+
+    if (spaceSlug !== rawToken.spaceSlug) {
+      throw new Error("An error occured");
+    }
+
+    return { ...connectedAccount, token: rawToken.accessToken };
   }
 }

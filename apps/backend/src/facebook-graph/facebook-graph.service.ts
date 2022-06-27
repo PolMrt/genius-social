@@ -103,9 +103,27 @@ export class FacebookGraphService {
     return data.data;
   }
 
-  async getGeneralIGInsights(accessToken: string, instagramAccountId: string) {
+  async getGeneralIGAudienceData(
+    accessToken: string,
+    instagramAccountId: string
+  ) {
     const data = await this.fetcher(
       `/${instagramAccountId}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime`,
+      accessToken
+    );
+    return data.data;
+  }
+
+  async getGeneralIGInsights(
+    accessToken: string,
+    instagramAccountId: string,
+    since: number,
+    until?: number
+  ) {
+    const data = await this.fetcher(
+      `/${instagramAccountId}/insights?metric=follower_count,reach,impressions,profile_views,email_contacts,get_directions_clicks,phone_call_clicks,text_message_clicks,website_clicks&period=day&since=${since}${
+        until ? `&until=${until}` : ""
+      }`,
       accessToken
     );
     return data.data;

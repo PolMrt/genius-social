@@ -48,11 +48,13 @@ export default function InvitationPage({ invitation }: any) {
     if (selectedInstaId) {
       setStep((prev) => (prev > 4 ? prev : 4));
 
-      acceptInvitationMutation.mutate({
-        instagramAccountId: selectedInstaId,
-        pageId: selectedPageId,
-        accessToken: fbAT,
-      });
+      if (!acceptInvitationMutation.isLoading) {
+        acceptInvitationMutation.mutate({
+          instagramAccountId: selectedInstaId,
+          pageId: selectedPageId,
+          accessToken: fbAT,
+        });
+      }
     }
   }, [selectedInstaId, acceptInvitationMutation, fbAT, selectedPageId]);
 

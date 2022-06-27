@@ -49,4 +49,34 @@ export class ConnectedAccountsController {
     );
     return infos;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/account-audience")
+  async accountAudience(
+    @Param("id") id: number,
+    @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string
+  ) {
+    const audience = await this.connectedAccountsService.getAccountAudience(
+      id,
+      spaceSlug,
+      req.userId
+    );
+    return audience;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/account-insights")
+  async accountInsights(
+    @Param("id") id: number,
+    @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string
+  ) {
+    const insights = await this.connectedAccountsService.getAccountInsights(
+      id,
+      spaceSlug,
+      req.userId
+    );
+    return insights;
+  }
 }

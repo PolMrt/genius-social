@@ -8,23 +8,10 @@ import withAuth from "hoc/auth";
 import withSpaceData from "hoc/space";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
+import { tabs } from "./index";
+import AccountInsights from "@/components/insights/account-insights";
 
-export const tabs = [
-  {
-    name: "Audience",
-    href: `/[spaceSlug]/connected-accounts/[id]`,
-  },
-  {
-    name: "Insights",
-    href: `/[spaceSlug]/connected-accounts/[id]/insights`,
-  },
-  // {
-  //   name: "Posts insights",
-  //   href: `/[spaceSlug]/connected-accounts/[id]/posts-insight`,
-  // },
-];
-
-function AudienceAccountPage({ space }: any) {
+function InsightAccountPage({ space }: any) {
   const router = useRouter();
   const accountDetails = useQuery(
     `/space/${space.slug}/connected-accounts/${router.query.id}`,
@@ -65,7 +52,7 @@ function AudienceAccountPage({ space }: any) {
       ]}
     >
       <AccountInfos spaceSlug={space.slug} accountId={accountDetails.data.id} />
-      <AccountAudience
+      <AccountInsights
         spaceSlug={space.slug}
         accountId={accountDetails.data.id}
       />
@@ -73,4 +60,4 @@ function AudienceAccountPage({ space }: any) {
   );
 }
 
-export default withAuth()(withSpaceData()(AudienceAccountPage));
+export default withAuth()(withSpaceData()(InsightAccountPage));
