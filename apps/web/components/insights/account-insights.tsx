@@ -2,28 +2,34 @@ import fetcher from "@/utils/fetcher";
 import { useQuery } from "react-query";
 import Card from "../ui/card";
 import LoadingIndicator from "../ui/loadingIndicator";
+import { defaults } from "chart.js";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import dayjs from "dayjs";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 );
+
+defaults.font.family =
+  'Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+defaults.color = "#6B7280";
+defaults.borderColor = "#E5E7EB";
 
 type Props = {
   spaceSlug: string;
@@ -55,7 +61,7 @@ export default function AccountInsights({ spaceSlug, accountId }: Props) {
           title={thisInsight.title}
           descritption={thisInsight.description}
         >
-          <Line
+          <Bar
             height={100}
             options={{
               elements: {
