@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import ReactCanvasConfetti from "react-canvas-confetti";
 import LoadingIndicator from "@/components/ui/loadingIndicator";
+import Button from "@/components/ui/button";
 
 export default function InvitationPage({ invitation }: any) {
   const [confState, setConfState] = useState({ fire: false, reset: false });
@@ -56,7 +57,8 @@ export default function InvitationPage({ invitation }: any) {
         });
       }
     }
-  }, [selectedInstaId, acceptInvitationMutation, fbAT, selectedPageId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedInstaId]);
 
   return (
     <main className="pt-6 pb-24">
