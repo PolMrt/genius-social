@@ -58,7 +58,18 @@ export default function AccountInsights({ spaceSlug, accountId }: Props) {
           <Line
             height={100}
             options={{
-              plugins: { legend: { display: false } },
+              elements: {
+                line: {
+                  cubicInterpolationMode: "monotone",
+                },
+                point: {
+                  radius: 0,
+                },
+              },
+              plugins: {
+                legend: { display: false },
+                tooltip: { intersect: false },
+              },
               scales: {
                 yAxis:
                   thisInsight.name !== "follower_count"
@@ -70,7 +81,7 @@ export default function AccountInsights({ spaceSlug, accountId }: Props) {
             }}
             data={{
               labels: thisInsight.values.map((thisInsight: any) =>
-                dayjs(thisInsight.end_time).format("DD/MM/YYYY")
+                dayjs(thisInsight.end_time).format("MMM D")
               ),
               datasets: [
                 {
