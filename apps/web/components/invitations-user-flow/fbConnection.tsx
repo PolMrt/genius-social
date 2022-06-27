@@ -20,6 +20,7 @@ export default function FbConnection({ token, setToken }: Props) {
         appId={"" + process.env.NEXT_PUBLIC_FB_APP_ID}
         version={process.env.NEXT_PUBLIC_FB_V}
         autoLoad={false}
+        disableMobileRedirect={true}
         fields="name,email"
         scope="pages_show_list,instagram_basic,instagram_manage_insights"
         callback={onFacebookLogin}
