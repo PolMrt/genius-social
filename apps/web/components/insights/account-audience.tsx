@@ -157,8 +157,8 @@ function GenderAge({ values }: any) {
         {
           name: "Gender",
           child: (
-            <div className="flex items-center justify-center">
-              <div className="flex-col items-center">
+            <div className="flex items-center justify-center pb-4">
+              <div className="flex flex-col items-center">
                 <div className="text-lg font-bold">
                   {Math.round(genderRepartitions.M.percentage * 10) / 10}%
                 </div>
@@ -167,7 +167,7 @@ function GenderAge({ values }: any) {
                   <span className="ml-1 inline-block h-1 w-1 rounded-full bg-dark-blue-500" />
                 </div>
               </div>
-              <div className="w-96 px-8">
+              <div className="w-1/2 px-8 md:w-96">
                 <Doughnut
                   data={{
                     labels: ["Women", "Men"],
@@ -195,7 +195,7 @@ function GenderAge({ values }: any) {
                   }}
                 />
               </div>
-              <div className="flex-col items-center">
+              <div className="flex flex-col items-center">
                 <div className="text-lg font-bold">
                   {Math.round(genderRepartitions.F.percentage * 10) / 10}%
                 </div>

@@ -143,10 +143,10 @@ export default function Sidebar({
                     </div>
                   </Transition.Child>
                   <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-                    <div className="flex flex-shrink-0 items-center px-4">
+                    <div className="flex flex-shrink-0 items-center justify-center px-4">
                       <img
-                        className="h-8 w-auto"
-                        src="/logo.svg"
+                        className="h-10 w-auto"
+                        src="/logo-full-white.svg"
                         alt="Genius Social"
                       />
                     </div>
@@ -171,26 +171,31 @@ export default function Sidebar({
                       ))}
                     </nav>
                   </div>
-                  <div className="flex flex-shrink-0 border-t border-dark-blue-800 p-4">
-                    <a href="#" className="group block flex-shrink-0">
-                      <div className="flex items-center">
-                        <div>
-                          <img
-                            className="inline-block h-10 w-10 rounded-full"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-base font-medium text-white">
-                            Tom Cook
-                          </p>
-                          <p className="text-sm font-medium text-dark-blue-200 group-hover:text-white">
-                            View profile
-                          </p>
-                        </div>
-                      </div>
-                    </a>
+                  <div className="px-4">
+                    <SpacesSelector currentSpace={currentSpace || ""} />
+                  </div>
+                  <div className="mt-2 flex flex-shrink-0 border-t border-dark-blue-800 p-4">
+                    {!userData.isLoading && !userData.isError ? (
+                      <a href="#" className="group block flex-shrink-0">
+                        <div className="flex items-center">
+                          <div>
+                            <img
+                              className="inline-block h-10 w-10 rounded-full"
+                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              alt=""
+                            />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-base font-medium text-white">
+                              {userData.data.name}
+                            </p>
+                            <p className="text-sm font-medium text-dark-blue-200 group-hover:text-white">
+                              View profile
+                            </p>
+                          </div>
+                        </div>{" "}
+                      </a>
+                    ) : null}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -206,10 +211,10 @@ export default function Sidebar({
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex min-h-0 flex-1 flex-col bg-dark-blue-700">
             <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4">
+              <div className="flex flex-shrink-0 items-center justify-center px-4">
                 <img
-                  className="h-8 w-auto"
-                  src="/logo.svg"
+                  className="h-10 w-auto"
+                  src="/logo-full-white.svg"
                   alt="Genius Social"
                 />
               </div>
@@ -291,23 +296,28 @@ export default function Sidebar({
                     </div>
                   </div>
                   <div className="mt-4">
-                    <div className="sm:hidden">
-                      <label htmlFor="current-tab" className="sr-only">
-                        Select a tab
-                      </label>
-                      <select
-                        id="current-tab"
-                        name="current-tab"
-                        className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-dark-blue-500 focus:outline-none focus:ring-dark-blue-500 sm:text-sm"
-                        defaultValue={
-                          tabsWithCurrent.find((tab) => tab.current)?.name
-                        }
-                      >
-                        {tabsWithCurrent.map((tab) => (
-                          <option key={tab.name}>{tab.name}</option>
-                        ))}
-                      </select>
-                    </div>
+                    {tabs.length > 0 ? (
+                      <div className="sm:hidden">
+                        <label htmlFor="current-tab" className="sr-only">
+                          Select a tab
+                        </label>
+                        <select
+                          id="current-tab"
+                          name="current-tab"
+                          className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-dark-blue-500 focus:outline-none focus:ring-dark-blue-500 sm:text-sm"
+                          defaultValue={
+                            tabsWithCurrent.find((tab) => tab.current)?.href
+                          }
+                          onChange={(e) => router.push(e.target.value)}
+                        >
+                          {tabsWithCurrent.map((tab) => (
+                            <option key={tab.name} value={tab.href}>
+                              {tab.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : null}
                     <div className="hidden sm:block">
                       <nav className="-mb-px flex space-x-8">
                         {tabsWithCurrent.map((tab) => (

@@ -15,7 +15,7 @@ export default function Card({
   className = "",
 }: Props) {
   return (
-    <div className={classNames(className, "bg-white shadow sm:rounded-lg")}>
+    <div className={classNames(className, "rounded-lg bg-white shadow")}>
       {title || descritption ? (
         <div className="px-4 py-5 sm:px-6">
           <h3 className="text-lg font-medium leading-6 text-gray-900">

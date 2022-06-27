@@ -108,7 +108,7 @@ export class FacebookGraphService {
     instagramAccountId: string
   ) {
     const data = await this.fetcher(
-      `/${instagramAccountId}/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime`,
+      `/${instagramAccountId}/insights?metric=audience_gender_age,audience_country,audience_locale,audience_city&period=lifetime`,
       accessToken
     );
     return data.data;

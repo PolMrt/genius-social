@@ -56,6 +56,7 @@ export default function AccountInsights({ spaceSlug, accountId }: Props) {
           descritption={thisInsight.description}
         >
           <Line
+            height={100}
             options={{
               plugins: { legend: { display: false } },
               scales: {
@@ -73,7 +74,7 @@ export default function AccountInsights({ spaceSlug, accountId }: Props) {
               ),
               datasets: [
                 {
-                  label: thisInsight.name,
+                  label: thisInsight.title,
                   data: thisInsight.values.map(
                     (thisInsight: any) => thisInsight.value
                   ),
