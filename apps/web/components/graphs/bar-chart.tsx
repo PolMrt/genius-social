@@ -11,19 +11,24 @@ type Bar = {
 type Props = {
   bars: Bar[];
   withShowMore?: boolean;
+  ordered?: boolean;
 };
 
-export default function BarChart({ bars, withShowMore = false }: Props) {
+export default function BarChart({
+  bars,
+  withShowMore = false,
+  ordered = true,
+}: Props) {
   const [showMore, setShowMore] = useState(false);
 
   const data = useMemo(() => {
-    let sorted = bars.sort((a, b) => b.value - a.value);
+    let sorted = ordered ? bars.sort((a, b) => b.value - a.value) : bars;
     if (withShowMore && !showMore) {
       return sorted.filter((el, index) => index < 5);
     } else {
       return sorted;
     }
-  }, [bars, withShowMore, showMore]);
+  }, [bars, withShowMore, showMore, ordered]);
 
   return (
     <div>

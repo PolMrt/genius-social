@@ -209,11 +209,11 @@ function GenderAge({ values }: any) {
         },
         {
           name: "Men age range",
-          child: <BarChart bars={menAgeRange} />,
+          child: <BarChart bars={menAgeRange} ordered={false} />,
         },
         {
           name: "Female age range",
-          child: <BarChart bars={femaleAgeRange} />,
+          child: <BarChart bars={femaleAgeRange} ordered={false} />,
         },
       ]}
     />
