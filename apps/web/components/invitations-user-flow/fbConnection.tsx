@@ -1,4 +1,5 @@
-import FacebookLogin from "react-facebook-login";
+import { FacebookProvider, Login } from "react-facebook";
+import Button from "../ui/button";
 
 type Props = {
   token: string;
@@ -7,25 +8,32 @@ type Props = {
 
 export default function FbConnection({ token, setToken }: Props) {
   const onFacebookLogin = (e: any) => {
-    if (e.accessToken) {
-      setToken(e.accessToken);
+    if (e?.tokenDetail?.accessToken) {
+      setToken(e.tokenDetail.accessToken);
     } else {
       alert("An error occured");
     }
   };
 
+  const onError = (e: any) => {
+    alert("An error occured");
+  };
+
   return (
     <div>
-      <FacebookLogin
-        appId={"" + process.env.NEXT_PUBLIC_FB_APP_ID}
-        version={process.env.NEXT_PUBLIC_FB_V}
-        autoLoad={false}
-        disableMobileRedirect={true}
-        fields="name,email"
-        scope="pages_show_list,instagram_basic,instagram_manage_insights"
-        callback={onFacebookLogin}
-        cssClass="w-full border-transparent bg-dark-blue-600 text-white hover:bg-dark-blue-700 focus:ring-dark-blue-500 inline-flex justify-center rounded-md border py-2 px-4 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
-      />
+      <FacebookProvider appId={process.env.NEXT_PUBLIC_FB_APP_ID}>
+        <Login
+          scope="email,pages_show_list,instagram_basic,instagram_manage_insights"
+          onCompleted={onFacebookLogin}
+          onError={onError}
+        >
+          {({ loading, handleClick, error, data }: any) => (
+            <Button onClick={handleClick} loading={loading} className="w-full">
+              Login via Facebook
+            </Button>
+          )}
+        </Login>
+      </FacebookProvider>
     </div>
   );
 }
