@@ -16,7 +16,6 @@ async function bootstrap() {
     })
   );
 
-  console.log(configService.get<string>("FRONTEND_URL"));
   app.use(cookieParser(configService.get<string>("COOKIE_SECRET")));
   app.enableCors({
     credentials: true,
