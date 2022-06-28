@@ -1,14 +1,20 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, ReactNode, useEffect, useMemo, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { HomeIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Dialog, Menu, Transition } from "@headlessui/react";
+import {
+  ChevronDownIcon,
+  HomeIcon,
+  MenuIcon,
+  XIcon,
+} from "@heroicons/react/outline";
 import SpacesSelector from "./spacesSelector";
 import { UserIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import fetcher from "@/utils/fetcher";
-import { useQuery } from "react-query";
+import fetcher, { postFetcher } from "@/utils/fetcher";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import LoadingIndicator from "../loadingIndicator";
 
 type Tab = {
   name: string;
@@ -86,12 +92,6 @@ export default function Sidebar({
       current: router.asPath === thisTab.href,
     }));
   }, [currentSpaceSlug, router, tabs, tabsLinkEnricher]);
-
-  const initials = useMemo(
-    () =>
-      !userData.isLoading && !userData.isError ? userData.data.name[0] : "",
-    [userData]
-  );
 
   return (
     <>
@@ -180,27 +180,9 @@ export default function Sidebar({
                   <div className="px-4">
                     <SpacesSelector currentSpace={currentSpace || ""} />
                   </div>
-                  <div className="mt-2 flex flex-shrink-0 border-t border-dark-blue-800 p-4">
+                  <div className="mt-2 flex w-full flex-shrink-0 border-t border-dark-blue-800 p-4">
                     {!userData.isLoading && !userData.isError ? (
-                      <a href="#" className="group block flex-shrink-0">
-                        <div className="flex items-center">
-                          <div>
-                            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                              <span className="font-medium leading-none text-white">
-                                {initials}
-                              </span>
-                            </span>
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-base font-medium text-white">
-                              {userData.data.name}
-                            </p>
-                            <p className="text-sm font-medium text-dark-blue-200 group-hover:text-white">
-                              View profile
-                            </p>
-                          </div>
-                        </div>{" "}
-                      </a>
+                      <UserTab userData={userData.data} />
                     ) : null}
                   </div>
                 </Dialog.Panel>
@@ -248,26 +230,10 @@ export default function Sidebar({
             <div className="mb-4 px-4">
               <SpacesSelector currentSpace={currentSpace || ""} />
             </div>
-            <div className="flex flex-shrink-0 border-t border-dark-blue-800 p-4">
+            <div className="flex w-full flex-shrink-0 border-t border-dark-blue-800 p-4">
               <div className="group block w-full flex-shrink-0">
                 {!userData.isLoading && !userData.isError ? (
-                  <div className="flex items-center">
-                    <div>
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                        <span className="font-medium leading-none text-white">
-                          {initials}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-white">
-                        {userData.data.name}
-                      </p>
-                      <p className="text-xs font-medium text-dark-blue-200 group-hover:text-white">
-                        View profile
-                      </p>
-                    </div>
-                  </div>
+                  <UserTab userData={userData.data} />
                 ) : null}
               </div>
             </div>
@@ -354,5 +320,108 @@ export default function Sidebar({
         </div>
       </div>
     </>
+  );
+}
+
+function UserTab({ userData }: any) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const initials = useMemo(() => userData.name[0], [userData]);
+  const logoutMutation = useMutation(() => postFetcher("/auth/logout", {}), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("/spaces");
+      queryClient.invalidateQueries("/users/me");
+      router.push("/login");
+    },
+  });
+
+  return (
+    <Menu as="div" className="relative w-full">
+      <div>
+        <Menu.Button className="flex w-full items-center justify-between text-gray-200">
+          <div className="flex items-center">
+            <div>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
+                <span className="font-medium leading-none ">{initials}</span>
+              </span>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-white">{userData.name}</p>
+            </div>
+          </div>
+          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+        </Menu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 bottom-12 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="px-4 py-3">
+            <p className="text-sm">Signed in as</p>
+            <p className="truncate text-sm font-medium text-gray-900">
+              {userData.mail}
+            </p>
+          </div>
+          <div className="py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <Link href={"/me/settings"}>
+                  <a
+                    className={classNames(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block px-4 py-2 text-sm"
+                    )}
+                  >
+                    Account settings
+                  </a>
+                </Link>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  href="#"
+                  className={classNames(
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block px-4 py-2 text-sm"
+                  )}
+                >
+                  Support
+                </a>
+              )}
+            </Menu.Item>
+          </div>
+          <div className="py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  type="button"
+                  onClick={() => logoutMutation.mutate()}
+                  className={classNames(
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block w-full px-4 py-2 text-left text-sm"
+                  )}
+                >
+                  {logoutMutation.isLoading ? (
+                    <div className="pl-1">
+                      <LoadingIndicator />
+                    </div>
+                  ) : (
+                    "Sign out"
+                  )}
+                </button>
+              )}
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
   );
 }

@@ -48,8 +48,10 @@ export class BackendController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("auth/test")
-  async test(@Request() req: any) {
-    return req.user;
+  @Post("auth/logout")
+  async test(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie("ACCESS-TOKEN");
+    res.clearCookie("XSRF-TOKEN");
+    return { success: true };
   }
 }
