@@ -2,6 +2,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { BackendModule } from "./backend.module";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(BackendModule);
@@ -12,7 +13,11 @@ async function bootstrap() {
       //forbidNonWhitelisted: true : will throw an error if a non whitelisted (by DTO) params is passed
     })
   );
-  app.enableCors();
+  app.use(cookieParser(process.env.COOKIE_SECRET));
+  app.enableCors({
+    credentials: true,
+    origin: process.env.FRONTEND_URL,
+  });
   app.use(helmet());
   await app.listen(3002);
 }

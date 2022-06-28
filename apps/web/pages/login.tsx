@@ -13,14 +13,13 @@ export default function Login() {
     (credentials: any) => postFetcher("/auth/login", credentials),
     {
       onSuccess: (data) => {
-        if (data?.data?.access_token && data?.data?.user) {
-          localStorage.setItem("token", data.data.access_token);
+        if (data?.data?.user) {
           queryClient.setQueryData("/users/me", () => data.data.user);
 
           if (data.data.user?.favoritSpace?.slug) {
-            router.push("/" + data.data.user.favoritSpace.slug);
+            return router.push("/" + data.data.user.favoritSpace.slug);
           } else {
-            router.push("/");
+            return router.push("/");
           }
         }
       },

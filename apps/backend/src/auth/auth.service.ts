@@ -33,10 +33,15 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { mail: user.mail, sub: user.id };
+    const xsrfToken =
+      Math.random().toString(36).substr(2, 20) +
+      Math.random().toString(36).substr(2, 20);
+
+    const payload = { mail: user.mail, sub: user.id, xsrfToken };
     return {
       user,
       access_token: this.jwtService.sign(payload),
+      xsrfToken,
     };
   }
 }

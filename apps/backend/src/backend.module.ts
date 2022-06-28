@@ -33,6 +33,9 @@ import * as Joi from "@hapi/joi";
         FB_V: Joi.string().required(),
         ENCRYPT_KEY_SPACE: Joi.string().required(),
         ENCRYPT_KEY_TOKEN: Joi.string().required(),
+        COOKIE_SECRET: Joi.string().required(),
+        FRONTEND_URL: Joi.string().required(),
+        FRONTEND_DOMAIN: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
