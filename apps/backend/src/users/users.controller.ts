@@ -1,6 +1,14 @@
 import { JwtAuthGuard } from "./../auth/guards/jwt-auth.guard";
-import { Controller, Get, UseGuards, Request } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Request,
+  Post,
+  Body,
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
+import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Controller("users")
 export class UsersController {
@@ -11,5 +19,11 @@ export class UsersController {
   async getMe(@Request() req: any) {
     const user = await this.usersService.findById(req.user.id);
     return user;
+  }
+
+  @Post("register")
+  async register(@Body() registerUserDto: RegisterUserDto) {
+    const newUser = await this.usersService.registerUser(registerUserDto);
+    return newUser;
   }
 }

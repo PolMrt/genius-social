@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { ApiFormatedError, postFetcher } from "@/utils/fetcher";
 import Button from "@/components/ui/button";
 import ApiError from "@/components/ui/apiError";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -49,11 +50,21 @@ export default function Login() {
   return (
     <div className="h-screen">
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <div className="flex w-full max-w-md flex-col space-y-8">
+          <div className="flex flex-col items-center">
+            <img src="/logo.svg" className="h-12" alt="Genius Social's logo" />
+            <h2 className="mt-4 text-center text-2xl font-bold text-gray-800">
               Sign in to your account
             </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or{" "}
+              <Link href="/register">
+                <a className="font-medium text-dark-blue-600 hover:text-dark-blue-500">
+                  create an account
+                </a>
+              </Link>
+              .
+            </p>
           </div>
           {mutation.isError && mutation.error instanceof ApiFormatedError ? (
             <ApiError error={mutation.error} />
