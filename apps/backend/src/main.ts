@@ -1,11 +1,13 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { BackendModule } from "./backend.module";
+import { ConfigService } from "@nestjs/config";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(BackendModule);
+  const configService = app.get(ConfigService);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -13,10 +15,10 @@ async function bootstrap() {
       //forbidNonWhitelisted: true : will throw an error if a non whitelisted (by DTO) params is passed
     })
   );
-  app.use(cookieParser(process.env.COOKIE_SECRET));
+  app.use(cookieParser(configService.get<string>("COOKIE_SECRET")));
   app.enableCors({
     credentials: true,
-    origin: process.env.FRONTEND_URL,
+    origin: configService.get<string>("FRONTEND_URL"),
   });
   app.use(helmet());
   await app.listen(3002);
