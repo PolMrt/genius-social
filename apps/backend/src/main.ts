@@ -15,6 +15,8 @@ async function bootstrap() {
       //forbidNonWhitelisted: true : will throw an error if a non whitelisted (by DTO) params is passed
     })
   );
+
+  console.log(configService.get<string>("FRONTEND_URL"));
   app.use(cookieParser(configService.get<string>("COOKIE_SECRET")));
   app.enableCors({
     credentials: true,
