@@ -30,7 +30,6 @@ export class BackendController {
 
     const sharedOptions = {
       expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // 24h
-      maxAge: 60 * 60 * 24,
       domain: this.configService.get<string>("FRONTEND_DOMAIN"),
       secure: true,
     };
