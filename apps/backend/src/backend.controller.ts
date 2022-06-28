@@ -28,16 +28,22 @@ export class BackendController {
   async login(@Request() req: any, @Res({ passthrough: true }) res: Response) {
     const tokenData = await this.authService.login(req.user);
 
-    res.cookie("ACCESS-TOKEN", tokenData.access_token, {
+    const expirationsoptions = {
       expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // 24h
       maxAge: 60 * 60 * 24,
+    };
+
+    res.cookie("ACCESS-TOKEN", tokenData.access_token, {
+      ...expirationsoptions,
       sameSite: "strict",
       httpOnly: true,
       domain: this.configService.get<string>("FRONTEND_DOMAIN"),
       secure: true,
     });
 
-    res.cookie("XSRF-TOKEN", tokenData.xsrfToken);
+    res.cookie("XSRF-TOKEN", tokenData.xsrfToken, {
+      ...expirationsoptions,
+    });
 
     return { user: tokenData.user };
   }
