@@ -23,11 +23,6 @@ export class BackendController {
     private readonly authService: AuthService
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.backendService.getHello();
-  }
-
   @UseGuards(LocalAuthGuard)
   @Post("auth/login")
   async login(@Request() req: any, @Res({ passthrough: true }) res: Response) {
