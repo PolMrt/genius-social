@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "react-query";
 import Button, { ButtonStyles } from "@/components/ui/button";
 import { ApiFormatedError, postFetcher } from "@/utils/fetcher";
 import { useRouter } from "next/router";
+import ApiError from "../ui/apiError";
 
 type Props = {
   open: boolean;
@@ -98,20 +99,13 @@ export default function Createspace({ open, setOpen }: Props) {
                         <div className="divide-y divide-gray-200 px-4 sm:px-6">
                           <div className="space-y-6 pt-6 pb-5">
                             {mutation.isError ? (
-                              <div>
-                                An error occured :
+                              <>
                                 {mutation.error instanceof ApiFormatedError ? (
-                                  <ul className="list-inside list-disc">
-                                    {mutation.error.messages.map(
-                                      (thisMessage) => (
-                                        <li key={thisMessage}>{thisMessage}</li>
-                                      )
-                                    )}
-                                  </ul>
+                                  <ApiError error={mutation.error} />
                                 ) : (
-                                  mutation.error
+                                  "An error occured"
                                 )}
-                              </div>
+                              </>
                             ) : null}
                             <div>
                               <label

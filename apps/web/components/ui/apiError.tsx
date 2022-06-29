@@ -2,7 +2,7 @@ import { ApiFormatedError } from "@/utils/fetcher";
 import classNames from "classnames";
 
 type Props = {
-  className: string;
+  className?: string;
   error: ApiFormatedError;
 };
 
