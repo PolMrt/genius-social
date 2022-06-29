@@ -11,7 +11,7 @@ export default function Login() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
-    (credentials: any) => postFetcher("/auth/login", credentials),
+    (credentials: any) => postFetcher("/users/login", credentials),
     {
       onSuccess: (data) => {
         if (data?.data?.user) {

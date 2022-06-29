@@ -327,7 +327,7 @@ function UserTab({ userData }: any) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const initials = useMemo(() => userData.name[0], [userData]);
-  const logoutMutation = useMutation(() => postFetcher("/auth/logout", {}), {
+  const logoutMutation = useMutation(() => postFetcher("/users/logout", {}), {
     onSuccess: () => {
       queryClient.invalidateQueries("/spaces");
       queryClient.invalidateQueries("/users/me");
