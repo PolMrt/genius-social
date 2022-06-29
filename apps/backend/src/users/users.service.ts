@@ -7,6 +7,9 @@ import {
 } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { RegisterUserDto } from "./dto/register-user.dto";
+import bcrypt from "bcrypt";
+import { ConfigService } from "@nestjs/config";
 
 type FindUserOptions = {
   selectPassword?: boolean;
@@ -21,7 +24,8 @@ const defaultOptions: FindUserOptions = {
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly configService: ConfigService
   ) {}
 
   async findById(
@@ -67,5 +71,33 @@ export class UsersService {
     }
 
     return { ...user, password: userWithPassword.password };
+  }
+
+  async registerUser(registerUserDto: RegisterUserDto) {
+    const alreadyExistingUser = await this.userRepository.findOne({
+      where: { mail: registerUserDto.email },
+    });
+    if (alreadyExistingUser) {
+      throw new HttpException(
+        "An user already has this email",
+        HttpStatus.CONFLICT
+      );
+    }
+
+    const passwordHashed = await bcrypt.hash(
+      registerUserDto.password,
+      +this.configService.get("HASH_SALT_ROUND")
+    );
+
+    const newUser = await this.userRepository.create({
+      name: registerUserDto.name,
+      mail: registerUserDto.email,
+      password: passwordHashed,
+      activate: false,
+    });
+
+    const user = await this.userRepository.save(newUser);
+
+    return { ...user, password: undefined };
   }
 }

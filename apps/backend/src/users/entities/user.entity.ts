@@ -22,6 +22,9 @@ export class User {
   @Column()
   name: string;
 
+  @Column({ nullable: false })
+  activate: boolean;
+
   @JoinTable()
   @ManyToMany(() => Space, (space) => space.users)
   spaces: Space[];
