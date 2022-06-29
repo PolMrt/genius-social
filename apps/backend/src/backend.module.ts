@@ -11,6 +11,8 @@ import { ConnectedAccountsModule } from "./connected-accounts/connected-accounts
 import { FacebookGraphModule } from "./facebook-graph/facebook-graph.module";
 import { InvitationsModule } from "./invitations/invitations.module";
 import * as Joi from "@hapi/joi";
+import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
+import { APP_GUARD } from "@nestjs/core";
 
 @Module({
   imports: [
@@ -48,6 +50,10 @@ import * as Joi from "@hapi/joi";
       autoLoadEntities: true, // models will be loaded automatically
       synchronize: process.env.NODE_ENV === "development", // TODO: your entities will be synced with the database(**recommended: disable in prod**)
     }),
+    ThrottlerModule.forRoot({
+      ttl: 10,
+      limit: 15,
+    }),
     CoffeesModule,
     AuthModule,
     UsersModule,
@@ -57,6 +63,12 @@ import * as Joi from "@hapi/joi";
     InvitationsModule,
   ],
   controllers: [BackendController],
-  providers: [BackendService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    BackendService,
+  ],
 })
 export class BackendModule {}
