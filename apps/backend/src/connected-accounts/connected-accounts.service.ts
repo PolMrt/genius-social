@@ -11,6 +11,7 @@ import { ConnectedAccount } from "./entities/connected-accounts.entity";
 import { SpacesService } from "../spaces/spaces.service";
 import { FacebookGraphService } from "../facebook-graph/facebook-graph.service";
 import dayjs from "dayjs";
+import { GetAccountInsightsDto } from "./dto/get-account-insights.dto";
 
 @Injectable()
 export class ConnectedAccountsService {
@@ -109,7 +110,22 @@ export class ConnectedAccountsService {
     return audience;
   }
 
-  async getAccountInsights(id: number, spaceSlug: string, userId: number) {
+  async getAccountInsights(
+    id: number,
+    spaceSlug: string,
+    userId: number,
+    getAccountInsightsDto: GetAccountInsightsDto
+  ) {
+    const from = dayjs(getAccountInsightsDto.from);
+    const until = dayjs(getAccountInsightsDto.until);
+
+    if (from.isAfter(until)) {
+      throw new HttpException(
+        "From can not be after until",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
     const connectedAccount = await this.getConnectedAccount(
       id,
       spaceSlug,
@@ -125,7 +141,8 @@ export class ConnectedAccountsService {
     const insights = await this.fbServive.getGeneralIGInsights(
       connectAccountWithToken.token,
       connectedAccount.plateformId,
-      nowMinus28.unix()
+      from.unix(),
+      until.unix()
     );
 
     return { ...insights, paging: undefined };

@@ -1,6 +1,14 @@
+import { GetAccountInsightsDto } from "./dto/get-account-insights.dto";
 import { JwtAuthGuard } from "./../auth/guards/jwt-auth.guard";
 import { ConnectedAccountsService } from "./connected-accounts.service";
-import { Controller, Get, Param, UseGuards, Request } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  UseGuards,
+  Request,
+  Query,
+} from "@nestjs/common";
 
 @Controller("space/:spaceSlug/connected-accounts")
 export class ConnectedAccountsController {
@@ -70,12 +78,14 @@ export class ConnectedAccountsController {
   async accountInsights(
     @Param("id") id: number,
     @Request() req: any,
-    @Param("spaceSlug") spaceSlug: string
+    @Param("spaceSlug") spaceSlug: string,
+    @Query() getAccountInsightsDto: GetAccountInsightsDto
   ) {
     const insights = await this.connectedAccountsService.getAccountInsights(
       id,
       spaceSlug,
-      req.userId
+      req.userId,
+      getAccountInsightsDto
     );
     return insights;
   }
