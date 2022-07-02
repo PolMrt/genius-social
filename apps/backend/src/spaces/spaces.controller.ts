@@ -41,12 +41,6 @@ export class SpacesController {
       createSpaceDto
     );
 
-    return {
-      ...createdSpace,
-      users: createdSpace.users.map((thisUser) => ({
-        ...thisUser,
-        password: undefined,
-      })),
-    };
+    return createdSpace;
   }
 }

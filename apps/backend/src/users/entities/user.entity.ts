@@ -5,8 +5,10 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { SpacesUsers } from "../../spaces/entities/spaces-users.entity";
 
 @Entity()
 export class User {
@@ -25,9 +27,12 @@ export class User {
   @Column({ nullable: false })
   activate: boolean;
 
-  @JoinTable()
-  @ManyToMany(() => Space, (space) => space.users)
-  spaces: Space[];
+  @OneToMany(() => SpacesUsers, (spaceUsers) => spaceUsers.user)
+  spaces: SpacesUsers[];
+
+  // @JoinTable()
+  // @ManyToMany(() => Space, (space) => space.users)
+  // spaces: Space[];
 
   @ManyToOne(() => Space, { eager: true })
   favoritSpace: Space;

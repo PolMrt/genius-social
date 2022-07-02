@@ -9,6 +9,7 @@ import {
 import { ConnectedAccount } from "../../connected-accounts/entities/connected-accounts.entity";
 import { Invitation } from "../../invitations/entities/invitation.entity";
 import { User } from "../../users/entities/user.entity";
+import { SpacesUsers } from "./spaces-users.entity";
 
 @Entity()
 export class Space {
@@ -21,8 +22,10 @@ export class Space {
   @Column()
   name: string;
 
-  @ManyToMany(() => User, (user) => user.spaces)
-  users: User[];
+  // @ManyToMany(() => User, (user) => user.spaces)
+  // users: User[];
+  @OneToMany(() => SpacesUsers, (spaceUsers) => spaceUsers.space)
+  users: SpacesUsers[];
 
   @OneToMany(() => Invitation, (invitation) => invitation.space)
   invitations: Invitation[];

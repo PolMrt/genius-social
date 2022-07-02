@@ -34,7 +34,7 @@ export class UsersService {
   ): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: options.includeSpaces ? ["spaces"] : [],
+      relations: options.includeSpaces ? ["spaces", "spaces.space"] : [],
     });
 
     if (!user) {
