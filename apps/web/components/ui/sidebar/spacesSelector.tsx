@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 import fetcher from "@/utils/fetcher";
 import Createspace from "@/components/spaces/createSpace";
-import { PlusIcon } from "@heroicons/react/outline";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useQuery } from "react-query";
 
@@ -21,8 +21,22 @@ export default function SpacesSelector({ currentSpace }: Props) {
 
       <Menu as="div" className="relative text-left">
         <div>
-          <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-300 shadow-sm  focus:outline-none focus:ring-2 focus:ring-dark-blue-300 focus:ring-offset-2 focus:ring-offset-dark-blue-700">
-            {currentSpace ? currentSpace : "Select space"}
+          <Menu.Button className="flex w-full items-center justify-between text-gray-300">
+            <div className="flex w-full items-center text-white">
+              {currentSpace ? (
+                <div className="mr-4 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gray-500">
+                  <div className="font-bold">
+                    {currentSpace[0].toUpperCase()}
+                  </div>
+                </div>
+              ) : null}
+              <div className="text-sm font-medium">
+                {currentSpace ? currentSpace : "Select space"}
+              </div>
+            </div>
+            <div>
+              <ChevronDownIcon className="h-5 w-5" />
+            </div>
           </Menu.Button>
         </div>
 
@@ -35,7 +49,7 @@ export default function SpacesSelector({ currentSpace }: Props) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute left-0 bottom-12 mt-2 w-56 origin-bottom-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute left-0 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
               <AllUserSpaces />
             </div>

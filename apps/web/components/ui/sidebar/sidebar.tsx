@@ -156,6 +156,9 @@ export default function Sidebar({
                         alt="Genius Social"
                       />
                     </div>
+                    <div className="mt-6 px-4">
+                      <SpacesSelector currentSpace={currentSpace || ""} />
+                    </div>
                     <nav className="mt-5 space-y-1 px-2">
                       {navigation.map((item) => (
                         <a
@@ -177,9 +180,7 @@ export default function Sidebar({
                       ))}
                     </nav>
                   </div>
-                  <div className="px-4">
-                    <SpacesSelector currentSpace={currentSpace || ""} />
-                  </div>
+
                   <div className="mt-2 flex w-full flex-shrink-0 border-t border-dark-blue-800 p-4">
                     {!userData.isLoading && !userData.isError ? (
                       <UserTab userData={userData.data} />
@@ -206,6 +207,9 @@ export default function Sidebar({
                   alt="Genius Social"
                 />
               </div>
+              <div className="mt-6 px-4">
+                <SpacesSelector currentSpace={currentSpace || ""} />
+              </div>
               <nav className="mt-5 flex-1 space-y-1 px-2">
                 {navigation.map((item) => (
                   <Link key={item.name} href={item.href}>
@@ -227,9 +231,7 @@ export default function Sidebar({
                 ))}
               </nav>
             </div>
-            <div className="mb-4 px-4">
-              <SpacesSelector currentSpace={currentSpace || ""} />
-            </div>
+
             <div className="flex w-full flex-shrink-0 border-t border-dark-blue-800 p-4">
               <div className="group block w-full flex-shrink-0">
                 {!userData.isLoading && !userData.isError ? (
