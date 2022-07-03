@@ -11,6 +11,7 @@ import { Repository } from "typeorm";
 import { Space } from "./entities/space.entity";
 import bannedTerms from "./data/banned-slugs";
 import { SpacesUsers } from "./entities/spaces-users.entity";
+import { Role } from "./enum/roles.enum";
 
 @Injectable()
 export class SpacesService {
@@ -71,6 +72,7 @@ export class SpacesService {
     const user = await this.usersService.findById(userId, {
       includeSpaces: true,
     });
+
     if (!user) {
       throw new NotFoundException();
     }
@@ -82,5 +84,36 @@ export class SpacesService {
     }
 
     return thisSpace.space;
+  }
+
+  async getRoleInSpace(userId: number, slug: string): Promise<Role> {
+    const user = await this.usersService.findById(userId, {
+      includeSpaces: true,
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const thisSpace = user.spaces.find((space) => space.space.slug === slug);
+
+    if (!thisSpace) {
+      throw new NotFoundException();
+    }
+
+    return thisSpace.role;
+  }
+
+  async getSpaceUsers(space: Space): Promise<SpacesUsers[]> {
+    const fspace = await this.spaceRepository.findOne({
+      where: { id: space.id },
+      relations: ["users", "users.user"],
+    });
+
+    if (!fspace) {
+      throw new NotFoundException();
+    }
+
+    return fspace.users;
   }
 }

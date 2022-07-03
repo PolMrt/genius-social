@@ -163,7 +163,12 @@ export class ConnectedAccountsService {
     const rawToken = this.fbServive.decryptToken(accountWithToken.token);
 
     if (spaceSlug !== rawToken.spaceSlug) {
-      throw new Error("An error occured");
+      throw new Error(
+        "An error occured, spaceSlug did not match in token and decoded token. SpaceSlug : " +
+          spaceSlug +
+          " but got : " +
+          rawToken.spaceSlug
+      );
     }
 
     return { ...connectedAccount, token: rawToken.accessToken };

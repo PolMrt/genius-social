@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useEffect, useState } from "react";
+import { forwardRef, Fragment, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import classNames from "classnames";
 
@@ -86,18 +86,28 @@ export function AllUserSpaces() {
     <div key={thisSpace.id}>
       <Menu.Item>
         {({ active }) => (
-          <Link href={`/${thisSpace.slug}`}>
-            <a
-              className={classNames(
-                active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                "block px-4 py-2 text-sm"
-              )}
-            >
-              {thisSpace.name}
-            </a>
-          </Link>
+          <MyLink
+            href={`/${thisSpace.slug}`}
+            className={classNames(
+              active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+              "block px-4 py-2 text-sm"
+            )}
+          >
+            {thisSpace.name}
+          </MyLink>
         )}
       </Menu.Item>
     </div>
   ));
 }
+const MyLink = forwardRef((props: any, ref) => {
+  let { href, children, ...rest } = props;
+  return (
+    <Link href={href}>
+      <a ref={ref} {...rest}>
+        {children}
+      </a>
+    </Link>
+  );
+});
+MyLink.displayName = "MyLink";

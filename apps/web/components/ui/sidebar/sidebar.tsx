@@ -3,12 +3,14 @@ import { Fragment, ReactNode, useEffect, useMemo, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
+  CogIcon,
   HomeIcon,
   MenuIcon,
+  UsersIcon,
+  UserIcon,
   XIcon,
 } from "@heroicons/react/outline";
 import SpacesSelector from "./spacesSelector";
-import { UserIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import classNames from "classnames";
 import { useRouter } from "next/router";
@@ -39,7 +41,6 @@ type Props = {
 export default function Sidebar({
   children,
   title,
-  currentSpace = null,
   currentSpaceSlug = null,
   actions = [],
   tabs = [],
@@ -47,7 +48,16 @@ export default function Sidebar({
 }: Props) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const userData = useQuery(`/users/me`, fetcher);
+
+  const spaceData = useQuery(`/spaces/${currentSpaceSlug}`, {
+    enabled: !!currentSpaceSlug,
+  });
+  const spaceDataReady = useMemo(
+    () => !(spaceData.isIdle || spaceData.isLoading || spaceData.isError),
+    [spaceData]
+  );
 
   const navigation = useMemo(() => {
     if (!currentSpaceSlug) return [];
@@ -57,20 +67,44 @@ export default function Sidebar({
         href: "/" + currentSpaceSlug,
         icon: HomeIcon,
         current: false,
+        admin: false,
       },
       {
         name: "Connected Accounts",
         href: "/" + currentSpaceSlug + "/connected-accounts",
         icon: UserIcon,
         current: false,
+        admin: false,
+      },
+      {
+        name: "Users",
+        href: "/" + currentSpaceSlug + "/users",
+        icon: UsersIcon,
+        current: false,
+        admin: true,
+      },
+      {
+        name: "Settings",
+        href: "/" + currentSpaceSlug + "/settings",
+        icon: CogIcon,
+        current: false,
+        admin: true,
       },
     ];
 
-    return routes.map((thisRoute) => ({
-      ...thisRoute,
-      current: router.asPath.split("/")[2] === thisRoute.href.split("/")[2],
-    }));
-  }, [currentSpaceSlug, router]);
+    if (!spaceDataReady) return [];
+
+    return routes
+      .filter(
+        (thisRoute) =>
+          !thisRoute.admin ||
+          (thisRoute.admin && spaceData.data.role === "admin")
+      )
+      .map((thisRoute) => ({
+        ...thisRoute,
+        current: router.asPath.split("/")[2] === thisRoute.href.split("/")[2],
+      }));
+  }, [currentSpaceSlug, router, spaceData, spaceDataReady]);
 
   const tabsWithCurrent = useMemo(() => {
     if (!currentSpaceSlug) return [];
@@ -157,7 +191,9 @@ export default function Sidebar({
                       />
                     </div>
                     <div className="mt-6 px-4">
-                      <SpacesSelector currentSpace={currentSpace || ""} />
+                      <SpacesSelector
+                        currentSpace={spaceData?.data?.name || ""}
+                      />
                     </div>
                     <nav className="mt-5 space-y-1 px-2">
                       {navigation.map((item) => (
@@ -208,7 +244,7 @@ export default function Sidebar({
                 />
               </div>
               <div className="mt-6 px-4">
-                <SpacesSelector currentSpace={currentSpace || ""} />
+                <SpacesSelector currentSpace={spaceData?.data?.name || ""} />
               </div>
               <nav className="mt-5 flex-1 space-y-1 px-2">
                 {navigation.map((item) => (
