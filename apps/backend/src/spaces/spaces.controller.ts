@@ -1,3 +1,4 @@
+import { AddUserDto } from "./dto/add-user.dto";
 import { JwtAuthGuard } from "./../auth/guards/jwt-auth.guard";
 import {
   Body,
@@ -12,6 +13,7 @@ import { CreateSpaceDto } from "./dto/create-space.dto";
 import { SpacesService } from "./spaces.service";
 import { UserInSpaceWithRoleGuard } from "./guard/user-space-role.guard";
 import { Role } from "./decorator/role.decorator";
+import { Throttle } from "@nestjs/throttler";
 
 @Controller("spaces")
 export class SpacesController {
@@ -33,6 +35,7 @@ export class SpacesController {
     return { ...thisSpace, role: role };
   }
 
+  @Throttle(5, 60 * 60 * 6)
   @UseGuards(JwtAuthGuard)
   @Post()
   async createSpace(
@@ -56,5 +59,24 @@ export class SpacesController {
     const users = await this.spacesService.getSpaceUsers(thisSpace);
 
     return users;
+  }
+
+  @Throttle(10, 60 * 30)
+  @Role("admin")
+  @UseGuards(UserInSpaceWithRoleGuard)
+  @UseGuards(JwtAuthGuard)
+  @Post(":slug/users")
+  async addUserToSpace(
+    @Param("slug") slug: string,
+    @Request() req: any,
+    @Body() addUserDto: AddUserDto
+  ) {
+    const addedUser = await this.spacesService.addUser(
+      req.user.id,
+      slug,
+      addUserDto
+    );
+
+    return addedUser;
   }
 }

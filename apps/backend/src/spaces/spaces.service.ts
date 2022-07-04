@@ -1,3 +1,4 @@
+import { AddUserDto } from "./dto/add-user.dto";
 import { UsersService } from "./../users/users.service";
 import { CreateSpaceDto } from "./dto/create-space.dto";
 import {
@@ -115,5 +116,35 @@ export class SpacesService {
     }
 
     return fspace.users;
+  }
+
+  async addUser(userId: number, slug: string, addUserDto: AddUserDto) {
+    const space = await this.getUserSpace(userId, slug);
+
+    const user = await this.usersService.findOne(addUserDto.email);
+
+    const users = await this.getSpaceUsers(space);
+
+    if (users.length > 10) {
+      throw new HttpException(
+        "User limit reached, please upgrade.",
+        HttpStatus.FORBIDDEN
+      );
+    }
+
+    if (users.find((thisUser) => thisUser.user.mail === addUserDto.email)) {
+      throw new HttpException(
+        "This user is alredy in this space",
+        HttpStatus.CONFLICT
+      );
+    }
+
+    const newUserSpace = this.spaceUsersRepository.create({
+      user,
+      space,
+      role: Role.user,
+    });
+
+    return this.spaceUsersRepository.save(newUserSpace);
   }
 }
