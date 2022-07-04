@@ -47,6 +47,7 @@ export class SpacesService {
     const newLink = await this.spaceUsersRepository.create({
       user,
       space: createdSpace,
+      role: Role.administrator,
     });
 
     await this.spaceUsersRepository.save(newLink);
