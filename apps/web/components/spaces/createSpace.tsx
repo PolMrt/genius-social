@@ -35,7 +35,7 @@ export default function Createspace({ open, setOpen }: Props) {
           ...draft,
           data?.data,
         ]);
-        router.push(data?.data.slug);
+        router.push("/" + data?.data.slug);
       },
     }
   );
