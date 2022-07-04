@@ -51,7 +51,7 @@ export default function Sidebar({
 
   const userData = useQuery(`/users/me`, fetcher);
 
-  const spaceData = useQuery(`/spaces/${currentSpaceSlug}`, {
+  const spaceData = useQuery(`/spaces/${currentSpaceSlug}`, fetcher, {
     enabled: !!currentSpaceSlug,
   });
   const spaceDataReady = useMemo(
