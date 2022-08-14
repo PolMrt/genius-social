@@ -52,7 +52,7 @@ export default function AccountPosts({ spaceSlug, accountId }: Props) {
         <span>Error</span>
       ) : (
         <>
-          <ul className="grid gap-6 md:grid-cols-3">
+          <ul className="grid gap-6 md:grid-cols-4">
             {posts?.data?.pages.map((page) => (
               <Fragment key={page.nextId}>
                 {page.data?.map((thisPost: any) => (
