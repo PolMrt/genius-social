@@ -140,7 +140,7 @@ export class FacebookGraphService {
     next?: string
   ) {
     const data = await this.fetcher(
-      `/${instagramAccountId}/media?fields=like_count,comments_count,media_url,thumbnail_url,permalink,timestamp,media_product_type,media_type&after=${
+      `/${instagramAccountId}/media?fields=like_count,comments_count,media_url,thumbnail_url,permalink,timestamp,media_product_type,media_type,caption&after=${
         next ? next : ""
       }`,
       accessToken

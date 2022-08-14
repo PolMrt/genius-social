@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-export default function LoadingIndicator({ className = "h-5 w-5" }) {
+export default function LoadingIndicator({ className = "h-5 w-5" }: Props) {
   return (
     <svg
       className={classNames(className, "animate-spin")}

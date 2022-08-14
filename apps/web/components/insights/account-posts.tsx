@@ -1,10 +1,11 @@
 import fetcher from "@/utils/fetcher";
 import { ChatIcon, HeartIcon } from "@heroicons/react/outline";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import Button from "../ui/button";
 import Card from "../ui/card";
 import LoadingIndicator from "../ui/loadingIndicator";
+import SinglePostModal from "./account-single-post";
 
 type Props = {
   spaceSlug: string;
@@ -12,6 +13,8 @@ type Props = {
 };
 
 export default function AccountPosts({ spaceSlug, accountId }: Props) {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [selectedMedia, setSelectedMedia] = useState<any>(null);
   const posts = useInfiniteQuery(
     `/space/${spaceSlug}/connected-accounts/${accountId}/account-posts`,
     async ({ queryKey, pageParam = "" }) => {
@@ -32,6 +35,13 @@ export default function AccountPosts({ spaceSlug, accountId }: Props) {
 
   return (
     <Card className="mb-6">
+      <SinglePostModal
+        open={openModal}
+        setOpen={setOpenModal}
+        media={selectedMedia}
+        spaceSlug={spaceSlug}
+        accountId={accountId}
+      />
       {posts.status === "loading" ? (
         <div className="flex items-center justify-center text-gray-700">
           <div>
@@ -50,7 +60,13 @@ export default function AccountPosts({ spaceSlug, accountId }: Props) {
                     key={thisPost.id}
                     className="flex flex-col justify-center"
                   >
-                    <div className="group relative w-full overflow-hidden rounded pb-[100%]">
+                    <button
+                      className="group relative w-full overflow-hidden rounded pb-[100%]"
+                      onClick={() => {
+                        setOpenModal(true);
+                        setSelectedMedia(thisPost);
+                      }}
+                    >
                       <img
                         src={
                           thisPost.media_type === "VIDEO"
@@ -97,7 +113,7 @@ export default function AccountPosts({ spaceSlug, accountId }: Props) {
                           </svg>
                         </div>
                       ) : null}
-                    </div>
+                    </button>
                   </li>
                 ))}
               </Fragment>
