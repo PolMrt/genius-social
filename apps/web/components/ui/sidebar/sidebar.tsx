@@ -62,13 +62,13 @@ export default function Sidebar({
   const navigation = useMemo(() => {
     if (!currentSpaceSlug) return [];
     const routes = [
-      {
-        name: "Dashboard",
-        href: "/" + currentSpaceSlug,
-        icon: HomeIcon,
-        current: false,
-        admin: false,
-      },
+      // {
+      //   name: "Dashboard",
+      //   href: "/" + currentSpaceSlug,
+      //   icon: HomeIcon,
+      //   current: false,
+      //   admin: false,
+      // },
       {
         name: "Connected Accounts",
         href: "/" + currentSpaceSlug + "/connected-accounts",

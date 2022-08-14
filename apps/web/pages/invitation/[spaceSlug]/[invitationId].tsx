@@ -10,6 +10,8 @@ import ReactCanvasConfetti from "react-canvas-confetti";
 import LoadingIndicator from "@/components/ui/loadingIndicator";
 import Button from "@/components/ui/button";
 import ApiError from "@/components/ui/apiError";
+import Card from "@/components/ui/card";
+import Bullet, { IconEnum } from "components/ui/permissionBullet";
 
 export default function InvitationPage({ invitation }: any) {
   const [confState, setConfState] = useState({ fire: false, reset: false });
@@ -62,91 +64,68 @@ export default function InvitationPage({ invitation }: any) {
   }, [selectedInstaId]);
 
   return (
-    <main className="pt-6 pb-24">
+    <main className="pt-8 pb-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-center font-sans2 text-2xl font-extrabold">
           {invitation.space.name}
         </h1>
-        <div className="relative z-0 mt-6 rounded-lg bg-white px-6 py-6 shadow">
-          <h2 className="text-xl font-medium">
+        <Card className="mt-8">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
             @{invitation.identifier} access request
           </h2>
-          <p className="mt-4">
+          <p className="mt-4 text-lg text-gray-500">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Beatae,
             iure dicta quae obcaecati perspiciatis sapiente aliquam labore sed
             quisquam cupiditate eligendi nemo delectus nihil cum. Necessitatibus
             et numquam excepturi soluta!
           </p>
-          <h2 className="mt-8 text-xl font-medium">
+          <h2 className="mt-12 text-2xl font-bold tracking-tight text-gray-900">
             {invitation.space.name} will be able to
           </h2>
-          <ul className="mt-4 flex flex-col space-y-4">
-            <li className="inline-flex items-center">
-              <div className="mr-4 rounded-full bg-gray-200 p-2">
-                <svg className="h-6 w-6 " fill="none" viewBox="0 0 24 24">
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                    d="M4.75 11.25l5.5-5.5M5.75 19.25h.5a1 1 0 001-1v-2.5a1 1 0 00-1-1h-.5a1 1 0 00-1 1v2.5a1 1 0 001 1zM11.75 19.25h.5a1 1 0 001-1v-5.5a1 1 0 00-1-1h-.5a1 1 0 00-1 1v5.5a1 1 0 001 1zM17.75 19.25h.5a1 1 0 001-1V5.75a1 1 0 00-1-1h-.5a1 1 0 00-1 1v12.5a1 1 0 001 1zM11.25 8.25v-3.5h-3.5"
-                  ></path>
-                </svg>
-              </div>
-              See profile performance
+          <ul className="mt-6 grid gap-6 md:grid-cols-2">
+            <li>
+              <Bullet
+                title="See profile performance"
+                icon={IconEnum.check}
+                description="Tempor tellus in aliquet eu et sit nulla tellus. Suspendisse est, molestie blandit quis ac. Lacus."
+              />
             </li>
-
-            <li className="inline-flex items-center">
-              <div className="mr-4 rounded-full bg-gray-200 p-2">
-                <svg className="h-6 w-6 " fill="none" viewBox="0 0 24 24">
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                    d="M4.75 16l2.746-3.493a2 2 0 013.09-.067L13 15.25m-2.085-2.427c1.037-1.32 2.482-3.188 2.576-3.31a2 2 0 013.094-.073L19 12.25m-12.25 7h10.5a2 2 0 002-2V6.75a2 2 0 00-2-2H6.75a2 2 0 00-2 2v10.5a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </div>
-              See posts
-            </li>
-
-            <li className="inline-flex items-center">
-              <div className="mr-4 rounded-full bg-gray-200 p-2">
-                <svg className="h-6 w-6 " fill="none" viewBox="0 0 24 24">
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                    d="M4.75 11.25l5.5-5.5M5.75 19.25h.5a1 1 0 001-1v-2.5a1 1 0 00-1-1h-.5a1 1 0 00-1 1v2.5a1 1 0 001 1zM11.75 19.25h.5a1 1 0 001-1v-5.5a1 1 0 00-1-1h-.5a1 1 0 00-1 1v5.5a1 1 0 001 1zM17.75 19.25h.5a1 1 0 001-1V5.75a1 1 0 00-1-1h-.5a1 1 0 00-1 1v12.5a1 1 0 001 1zM11.25 8.25v-3.5h-3.5"
-                  ></path>
-                </svg>
-              </div>
-              See posts performance
+            <li>
+              <Bullet
+                title="See posts & performance"
+                icon={IconEnum.check}
+                description="Tempor tellus in aliquet eu et sit nulla tellus. Suspendisse est, molestie blandit quis ac. Lacus."
+              />
             </li>
           </ul>
 
-          <h2 className="mt-8 text-xl font-medium">
+          <h2 className="mt-12 text-2xl font-bold tracking-tight text-gray-900">
             {invitation.space.name} will not be able to
           </h2>
-          <ul className="mt-4 flex flex-col space-y-4">
-            <li className="inline-flex items-center">
-              <div className="mr-4 rounded-full bg-gray-200 p-2">
-                <svg className="h-6 w-6 " fill="none" viewBox="0 0 24 24">
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.5"
-                    d="M4.75 4.75h12.5a2 2 0 012 2v5.5m0 0l-2.664-2.81a2 2 0 00-3.085.06l-.01.013c-.067.087-.879 1.137-1.718 2.213m7.477.524v7M4.75 16l2.5-3.25M4.75 16v1.25a2 2 0 002 2h7.5M4.75 16V9M4.75 4.75l14.5 14.5"
-                  ></path>
-                </svg>
-              </div>
-              Post on your account or edit your content
+          <ul className="mt-6 grid gap-6 md:grid-cols-2">
+            <li>
+              <Bullet
+                title="Post on your account"
+                icon={IconEnum.cross}
+                description="Tempor tellus in aliquet eu et sit nulla tellus. Suspendisse est, molestie blandit quis ac. Lacus."
+              />
+            </li>
+            <li>
+              <Bullet
+                title="Edit your content or account"
+                icon={IconEnum.cross}
+                description="Tempor tellus in aliquet eu et sit nulla tellus. Suspendisse est, molestie blandit quis ac. Lacus."
+              />
+            </li>
+            <li>
+              <Bullet
+                title="See your messages"
+                icon={IconEnum.cross}
+                description="Tempor tellus in aliquet eu et sit nulla tellus. Suspendisse est, molestie blandit quis ac. Lacus."
+              />
             </li>
           </ul>
-        </div>
+        </Card>
 
         {acceptInvitationMutation.isSuccess ||
         invitation.state === "accepted" ? (
@@ -186,7 +165,7 @@ export default function InvitationPage({ invitation }: any) {
             </div>
           </>
         ) : (
-          <div className="mt-6 rounded-lg bg-white px-6 py-6 shadow">
+          <Card className="mt-6">
             <Steps step={step} />
             <div className="mt-8">
               {step === 1 ? (
@@ -232,7 +211,7 @@ export default function InvitationPage({ invitation }: any) {
                 </>
               ) : null}
             </div>
-          </div>
+          </Card>
         )}
       </div>
     </main>

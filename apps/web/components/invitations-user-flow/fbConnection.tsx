@@ -29,7 +29,7 @@ export default function FbConnection({ token, setToken }: Props) {
         >
           {({ loading, handleClick, error, data }: any) => (
             <Button onClick={handleClick} loading={loading} className="w-full">
-              Login via Facebook
+              Login with Facebook
             </Button>
           )}
         </Login>

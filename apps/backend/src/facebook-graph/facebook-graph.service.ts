@@ -134,6 +134,20 @@ export class FacebookGraphService {
     return data.data;
   }
 
+  async getIGPosts(
+    accessToken: string,
+    instagramAccountId: string,
+    next?: string
+  ) {
+    const data = await this.fetcher(
+      `/${instagramAccountId}/media?fields=like_count,comments_count,media_url,thumbnail_url,permalink,timestamp,media_product_type,media_type&after=${
+        next ? next : ""
+      }`,
+      accessToken
+    );
+    return data.data;
+  }
+
   private fetcher(url: string, accessToken: string) {
     const fetchUrl = new URL(
       `https://graph.facebook.com/v${this.configService.get<string>(

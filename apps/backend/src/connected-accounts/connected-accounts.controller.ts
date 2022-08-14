@@ -9,6 +9,7 @@ import {
   Request,
   Query,
 } from "@nestjs/common";
+import { GetAccountPostsDto } from "./dto/get-account-posts.dto";
 
 @Controller("space/:spaceSlug/connected-accounts")
 export class ConnectedAccountsController {
@@ -88,5 +89,22 @@ export class ConnectedAccountsController {
       getAccountInsightsDto
     );
     return insights;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/account-posts")
+  async accountPosts(
+    @Param("id") id: number,
+    @Request() req: any,
+    @Param("spaceSlug") spaceSlug: string,
+    @Query() getAccountPostsDto: GetAccountPostsDto
+  ) {
+    const posts = await this.connectedAccountsService.getAccountPosts(
+      id,
+      spaceSlug,
+      req.userId,
+      getAccountPostsDto
+    );
+    return posts;
   }
 }

@@ -12,6 +12,7 @@ import { SpacesService } from "../spaces/spaces.service";
 import { FacebookGraphService } from "../facebook-graph/facebook-graph.service";
 import dayjs from "dayjs";
 import { GetAccountInsightsDto } from "./dto/get-account-insights.dto";
+import { GetAccountPostsDto } from "./dto/get-account-posts.dto";
 
 @Injectable()
 export class ConnectedAccountsService {
@@ -146,6 +147,31 @@ export class ConnectedAccountsService {
     );
 
     return { ...insights, paging: undefined };
+  }
+
+  async getAccountPosts(
+    id: number,
+    spaceSlug: string,
+    userId: number,
+    getAccountPostsDto: GetAccountPostsDto
+  ) {
+    const connectedAccount = await this.getConnectedAccount(
+      id,
+      spaceSlug,
+      userId
+    );
+    const connectAccountWithToken = await this.getConnectedAccountWithToken(
+      connectedAccount,
+      spaceSlug
+    );
+
+    const posts = await this.fbServive.getIGPosts(
+      connectAccountWithToken.token,
+      connectedAccount.plateformId,
+      getAccountPostsDto.next
+    );
+
+    return { ...posts, paging: undefined, next: posts?.paging?.cursors?.after };
   }
 
   async getConnectedAccountWithToken(
