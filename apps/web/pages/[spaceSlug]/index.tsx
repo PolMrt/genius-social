@@ -6,7 +6,10 @@ import withAuth from "../../hoc/auth";
 
 function Sapcehomepage({ space }: any) {
   const router = useRouter();
-  useEffect(() => router.push(`/${space.slug}/connected-accounts`), []);
+  useEffect(() => {
+    router.push(`/${space.slug}/connected-accounts`);
+  }, []);
+
   return (
     <Sidebar
       title={space.name}

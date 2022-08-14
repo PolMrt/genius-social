@@ -41,6 +41,7 @@ function PostsAccountPage({ space }: any) {
       tabsLinkEnricher={[{ name: "id", value: "" + router.query.id }]}
       actions={[
         <Button
+          key={1}
           onClick={() =>
             window.open(
               "https://instagram.com/" + accountDetails.data.identifier,

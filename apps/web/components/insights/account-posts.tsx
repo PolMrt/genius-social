@@ -1,6 +1,6 @@
 import fetcher from "@/utils/fetcher";
-import { ChatIcon, HeartIcon, PlayIcon } from "@heroicons/react/outline";
-import { Fragment, useState } from "react";
+import { ChatIcon, HeartIcon } from "@heroicons/react/outline";
+import { Fragment } from "react";
 import { useInfiniteQuery } from "react-query";
 import Button from "../ui/button";
 import Card from "../ui/card";

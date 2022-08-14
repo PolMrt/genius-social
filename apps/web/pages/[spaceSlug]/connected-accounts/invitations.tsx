@@ -19,7 +19,7 @@ function connectedAccountsInvitations({ space }: any) {
       currentSpaceSlug={space.slug}
       tabs={tabs}
       actions={[
-        <Button onClick={() => setNewInvitationOpen(true)}>
+        <Button key={1} onClick={() => setNewInvitationOpen(true)}>
           New invitation
         </Button>,
       ]}

@@ -14,7 +14,11 @@ function Users({ space }: any) {
       title="Space's users"
       currentSpaceSlug={space.slug}
       tabs={[]}
-      actions={[<Button onClick={() => setShowAddUser(true)}>Add user</Button>]}
+      actions={[
+        <Button key={1} onClick={() => setShowAddUser(true)}>
+          Add user
+        </Button>,
+      ]}
     >
       <AddUserToSpace
         open={showAddUser}
