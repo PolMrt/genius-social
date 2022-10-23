@@ -126,7 +126,9 @@ export class FacebookGraphService {
     until?: number
   ) {
     const data = await this.fetcher(
-      `/${instagramAccountId}/insights?metric=follower_count,reach,impressions,profile_views,email_contacts,get_directions_clicks,phone_call_clicks,text_message_clicks,website_clicks&period=day&since=${since}${
+      `/${instagramAccountId}/insights?metric=${
+        until ? "" : "follower_count,"
+      }reach,impressions,profile_views,email_contacts,get_directions_clicks,phone_call_clicks,text_message_clicks,website_clicks&period=day&since=${since}${
         until ? `&until=${until}` : ""
       }`,
       accessToken
