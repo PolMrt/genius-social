@@ -1,5 +1,8 @@
 import { FacebookProvider, Login } from "react-facebook";
+import Image from "next/image";
 import Button from "../ui/button";
+
+import FacebookLogoWhite from "assets/facebook-f-white.png";
 
 type Props = {
   token: string;
@@ -28,7 +31,14 @@ export default function FbConnection({ token, setToken }: Props) {
           onError={onError}
         >
           {({ loading, handleClick, error, data }: any) => (
-            <Button onClick={handleClick} loading={loading} className="w-full">
+            <Button
+              onClick={handleClick}
+              loading={loading}
+              className="inline-flex w-full items-center !bg-facebook-light"
+            >
+              <div className="mr-[0.375rem] h-6 w-6">
+                <Image src={FacebookLogoWhite} alt="Facebook Logo" />
+              </div>
               Login with Facebook
             </Button>
           )}

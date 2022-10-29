@@ -11,6 +11,7 @@ module.exports = {
         sans2: ["Montserrat", ...defaultTheme.fontFamily.sans],
       },
       colors: {
+        facebook: { light: "#1877F2" },
         "dark-blue": {
           DEFAULT: "#3BA2DC",
           50: "#D7ECF8",
