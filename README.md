@@ -12,6 +12,10 @@
 
 ---
 
+> [!WARNING]  
+> The status of this project is **unmaintained**.
+> Meta refused all of our requests to access the Instagram API, that is the reason we decided to stop the development of this project and make it open source.
+
 The goal of this project was to create a website to help agencies retrieving insights from their creators' Instagram account. It works by connecting Instagram account to a space.
 
 This project goal was to extend the current website [genius.social](https://www.genius.social/).
