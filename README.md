@@ -1,77 +1,31 @@
-# Turborepo starter
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/PolMrt/genius-social/HEAD/.github/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/PolMrt/genius-social/HEAD/.github/logo-light.svg">
+    <img alt="Tailwind CSS" src="https://raw.githubusercontent.com/PolMrt/genius-social/HEAD/.github/logo-light.svg" width="350" height="70" style="max-width: 100%;">
+  </picture>
+</p>
 
-This is an official Yarn v1 starter turborepo.
+<p align="center">
+  Connect agencies with their creators' Instagram insights.
+</p>
 
-## What's inside?
+---
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
+The goal of this project was to create a website to help agencies retrieving insights from their creators' Instagram account. It works by connecting Instagram account to a space.
 
-### Apps and Packages
+This project goal was to extend the current website [genius.social](https://www.genius.social/).
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+## Preview of the website
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+// Todo
 
-### Utilities
+## How it works
 
-This turborepo has some additional tools already setup for you:
+The website is built with React and uses the Instagram API to retrieve the data from the user's account. The user can connect his account to the website and then the website will retrieve the data from the user's account.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+The process to do so is the following:
 
-## Setup
-
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-yarn run dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching (Beta)](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching (Beta) you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching (Beta)](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
+- The agency generate an unique link on the website
+- The talent clicks on the link and connects his Instagram account to the website
+- The website retrieves the data from the talent's account and displays it to the agency
