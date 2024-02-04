@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  Connect agencies with their creators' Instagram insights.
+  Access multiple Instagram accounts' insights in one place.
 </p>
 
 ---
@@ -16,13 +16,15 @@
 > The status of this project is **unmaintained**.
 > Meta refused all of our requests to access the Instagram API, that is the reason we decided to stop the development of this project and make it open source.
 
-The goal of this project was to create a website to help agencies retrieving insights from their creators' Instagram account. It works by connecting Instagram account to a space.
+The goal of this project was to create a website to help agencies retrieving insights from their creators' Instagram account. It works by connecting Instagram account to a space and shows all the insights in that space.
 
 This project goal was to extend the current website [genius.social](https://www.genius.social/).
 
 ## Preview of the website
 
-// Todo
+![Top of the account's insights tab, shows Instagram followers/following and selection of a date range](.github/screenshots/account-insights.png)
+![Middle of the account's insights tab, shows graphs about reach and impressions](.github/screenshots/account-insights-2.png)
+![Shows users last post like and comment count](.github/screenshots/posts-insights.png)
 
 ## How it works
 
